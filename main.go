@@ -97,10 +97,31 @@ func listDeployments(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{"deployments": list.Items})
 }
 
+func deleteDeployment(c *fiber.Ctx) error {
+	clientset, err := config.KubeConfig()
+	if err != nil {
+		zap.L().Error(err.Error())
+		panic(err)
+	}
+
+	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
+	deletePolicy := metav1.DeletePropagationForeground
+	if err := deploymentsClient.Delete(context.TODO(), "demo-deployment", metav1.DeleteOptions{
+		PropagationPolicy: &deletePolicy,
+	}); err != nil {
+		zap.L().Error(err.Error())
+		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+	}
+
+	zap.L().Info("Deleted deployment 'demo-deployment'.")
+	return c.JSON(fiber.Map{"message": "Deleted deployment 'demo-deployment'."})
+}
+
 func main() {
 	app := fiber.New()
 
 	app.Get("/api/deployment/create", createDeployment)
+	app.Get("/api/deployment/delete", deleteDeployment)
 	app.Get("/api/deployment/list", listDeployments)
 
 	zap.L().Info("Fiber listening on port 3000")
