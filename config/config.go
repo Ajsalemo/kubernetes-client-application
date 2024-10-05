@@ -1,13 +1,16 @@
 package config
 
 import (
-	"go.uber.org/zap"
 	"path/filepath"
+
+	"go.uber.org/zap"
 
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 )
+
+func Int32Ptr(i int32) *int32 { return &i }
 
 func KubeConfig() (*kubernetes.Clientset, error) {
 	var kubeconfig string
