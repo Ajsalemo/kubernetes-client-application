@@ -17,15 +17,22 @@ func DeleteDeployment(c *fiber.Ctx) error {
 		panic(err)
 	}
 
+	var k8sDeploymentName = config.KubernetesDeploymentName{}
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
+
+	if err := c.BodyParser(&k8sDeploymentName); err != nil {
+		zap.L().Error(err.Error())
+		return err
+	}
+
 	deletePolicy := metav1.DeletePropagationForeground
-	if err := deploymentsClient.Delete(context.TODO(), "demo-deployment", metav1.DeleteOptions{
+	if err := deploymentsClient.Delete(context.TODO(), k8sDeploymentName.Name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
 	}); err != nil {
 		zap.L().Error(err.Error())
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	zap.L().Info("Deleted deployment 'demo-deployment'.")
-	return c.JSON(fiber.Map{"message": "Deleted deployment 'demo-deployment'."})
+	zap.L().Info("Deleted deployment " + k8sDeploymentName.Name)
+	return c.JSON(fiber.Map{"message": "Deleted deployment " + k8sDeploymentName.Name})
 }

@@ -18,11 +18,17 @@ func CreateDeployment(c *fiber.Ctx) error {
 		panic(err)
 	}
 
+	var k8sDeploymentName = config.KubernetesDeploymentName{}
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
+
+	if err := c.BodyParser(&k8sDeploymentName); err != nil {
+		zap.L().Error(err.Error())
+		return err
+	}
 
 	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: "demo-deployment",
+			Name: k8sDeploymentName.Name,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: config.Int32Ptr(1),
@@ -57,7 +63,7 @@ func CreateDeployment(c *fiber.Ctx) error {
 	}
 
 	// Create Deployment
-	zap.L().Info("Creating deployment")
+	zap.L().Info("Creating deployment " + k8sDeploymentName.Name)
 	result, err := deploymentsClient.Create(context.TODO(), deployment, metav1.CreateOptions{})
 	if err != nil {
 		zap.L().Error(err.Error())

@@ -8,14 +8,13 @@ import (
 
 func init() {
 	zap.ReplaceGlobals(zap.Must(zap.NewProduction()))
-
 }
 
 func main() {
 	app := fiber.New()
 
-	app.Get("/api/deployment/create", controllers.CreateDeployment)
-	app.Get("/api/deployment/delete", controllers.DeleteDeployment)
+	app.Post("/api/deployment/create", controllers.CreateDeployment)
+	app.Post("/api/deployment/delete", controllers.DeleteDeployment)
 	app.Get("/api/deployment/list", controllers.ListDeployments)
 
 	zap.L().Info("Fiber listening on port 3000")
