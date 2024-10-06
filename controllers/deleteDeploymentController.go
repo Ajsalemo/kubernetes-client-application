@@ -17,22 +17,22 @@ func DeleteDeployment(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	var k8sDeploymentName = config.KubernetesDeploymentName{}
+	var deleteDeploymentStruct = config.DeleteDeploymentStruct{}
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
-
-	if err := c.BodyParser(&k8sDeploymentName); err != nil {
+	// Parse the request body into the k8sDeploymentName struct
+	if err := c.BodyParser(&deleteDeploymentStruct); err != nil {
 		zap.L().Error(err.Error())
 		return err
 	}
 
 	deletePolicy := metav1.DeletePropagationForeground
-	if err := deploymentsClient.Delete(context.TODO(), k8sDeploymentName.Name, metav1.DeleteOptions{
+	if err := deploymentsClient.Delete(context.TODO(), deleteDeploymentStruct.Name, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
 	}); err != nil {
 		zap.L().Error(err.Error())
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	zap.L().Info("Deleted deployment " + k8sDeploymentName.Name)
-	return c.JSON(fiber.Map{"message": "Deleted deployment " + k8sDeploymentName.Name})
+	zap.L().Info("Deleted deployment " + deleteDeploymentStruct.Name)
+	return c.JSON(fiber.Map{"message": "Deleted deployment " + deleteDeploymentStruct.Name})
 }

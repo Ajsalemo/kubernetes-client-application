@@ -20,6 +20,7 @@ func ListDeployments(c *fiber.Ctx) error {
 
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
 	list, err := deploymentsClient.List(context.TODO(), metav1.ListOptions{})
+
 	if err != nil {
 		zap.L().Error(err.Error())
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})

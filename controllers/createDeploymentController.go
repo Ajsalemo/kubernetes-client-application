@@ -18,41 +18,41 @@ func CreateDeployment(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	var k8sDeploymentName = config.KubernetesDeploymentName{}
+	var createDeploymentStruct = config.CreateDeploymentStruct{}
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
-
-	if err := c.BodyParser(&k8sDeploymentName); err != nil {
+	// Parse the request body into the createDeploymentStruct struct
+	if err := c.BodyParser(&createDeploymentStruct); err != nil {
 		zap.L().Error(err.Error())
 		return err
 	}
 
 	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: k8sDeploymentName.Name,
+			Name: createDeploymentStruct.DeploymentName,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: config.Int32Ptr(1),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
-					"app": "demo",
+					"app": createDeploymentStruct.DeploymentLabel,
 				},
 			},
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						"app": "demo",
+						"app": createDeploymentStruct.DeploymentLabel,
 					},
 				},
 				Spec: apiv1.PodSpec{
 					Containers: []apiv1.Container{
 						{
-							Name:  "nginx",
-							Image: "nginx:latest",
+							Name:  createDeploymentStruct.ContainerName,
+							Image: createDeploymentStruct.ContainerImageName + ":" + createDeploymentStruct.ContainerImageTag,
 							Ports: []apiv1.ContainerPort{
 								{
 									Name:          "http",
 									Protocol:      apiv1.ProtocolTCP,
-									ContainerPort: 80,
+									ContainerPort: createDeploymentStruct.ContainerPort,
 								},
 							},
 						},
@@ -63,7 +63,7 @@ func CreateDeployment(c *fiber.Ctx) error {
 	}
 
 	// Create Deployment
-	zap.L().Info("Creating deployment " + k8sDeploymentName.Name)
+	zap.L().Info("Creating deployment " + createDeploymentStruct.DeploymentName)
 	result, err := deploymentsClient.Create(context.TODO(), deployment, metav1.CreateOptions{})
 	if err != nil {
 		zap.L().Error(err.Error())
