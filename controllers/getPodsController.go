@@ -26,10 +26,10 @@ func GetPods(c *fiber.Ctx) error {
 
 	podsClient := clientset.CoreV1().Pods(apiv1.NamespaceDefault)
 	listOptions := metav1.ListOptions{
-		FieldSelector: fmt.Sprintf("metadata.name=%s", c.Params("pod")),
+		LabelSelector: fmt.Sprintf("app=%s", c.Params("pod")),
 	}
 
-	getPods, err := podsClient.List(context.TODO(), metav1.ListOptions{FieldSelector: listOptions.FieldSelector})
+	getPods, err := podsClient.List(context.TODO(), metav1.ListOptions{LabelSelector: listOptions.LabelSelector})
 
 	if err != nil {
 		zap.L().Error(err.Error())
