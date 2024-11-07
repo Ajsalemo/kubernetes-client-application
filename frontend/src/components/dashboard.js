@@ -30,22 +30,20 @@ export const Dashboard = () => {
     }));
 
     const [listDeployments, setListDeployments] = useState([])
-    const [listDeploymentsError, setListDeploymentsError] = useState("")
+    const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("")
+    const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("")
 
     useEffect(() => {
         const getListDeployments = async() => {
             try {
                 // Fetch all Deployment information from k8s
-                const response = await axios.get('http://localhost:3070/api/deployment/list');
-                console.log(response.data);
-                setListDeployments(response.data.deployments);
-                console.log(listDeployments);
+                const { data: { deployments } } = await axios.get('http://localhost:3070/api/deployment/list');
+                setListDeployments(deployments);
             } catch (error) {
-                console.error(error);
-                console.error(error.response.data.error);
-                if (error.response.data && error.response.data.error) {
-                    setListDeploymentsError(error.response.data.error);
-                }
+                console.error(error.code);
+                console.error(error.message);
+                setListDeploymentsErrorCode(error.code);
+                setListDeploymentsErrorMessage(error.message);
             }
         }
 
@@ -59,29 +57,34 @@ export const Dashboard = () => {
                     <Item>i</Item>
                 </Grid>
                 <Grid size={{ xs: 6 }}>
-                    {/* {listDeploymentsError && <Item>{listDeploymentsError}</Item>} */}
-
-                    {listDeployments.map((deployment, index) => (
-                        <Item key={index}>
-                            Deployment name: {deployment.metadata.name}
-                            Replica count: {deployment.spec.replicas}
-                            terminationGracePeriodSeconds: {deployment.spec.terminationGracePeriodSeconds}
-                            {deployment.spec.template.spec.containers.map((container, index) => (
-                                <div key={index}>
-                                    Container name: {container.name}
-                                    Image: {container.image}
-                                    Ports: {container.ports.map((port, index) => (
-                                        <div key={index}>
-                                            Container Port: {port.containerPort}
-                                            Protocol: {port.protocol}
-                                        </div>
-                                    ))}
-                                    CPU (limit): {container.resources.limits.cpu}
-                                    Memory (limit): {container.resources.limits.memory}
-                                </div>
-                            ))}
-                        </Item>
-                    ))}
+                    <Item>
+                        {listDeploymentsErrorCode && <div style={{color: 'red'}}>Error code: {listDeploymentsErrorCode}</div>}
+                        {listDeploymentsErrorMessage && <div style={{color: 'red'}}>Error message: {listDeploymentsErrorMessage}</div>}
+                        {listDeployments.map((deployment, index) => (
+                            <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                <span><b>Deployment name:</b> {deployment.metadata.name}</span>
+                                <span><b>Replica count:</b> {deployment.spec.replicas}</span>
+                                <span><b>terminationGracePeriodSeconds:</b> {deployment.spec.terminationGracePeriodSeconds}</span>
+                                {deployment.spec.template.spec.containers.map((container, index) => (
+                                    <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                        <span><b>Container name:</b> {container.name}</span>
+                                        <span><b>Image:</b> {container.image}</span>
+                                        <ul style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                            <b>Ports:</b> 
+                                            {container.ports.map((port, index) => (
+                                            <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingLeft: '2rem' }}>
+                                                <li><b>Container Port:</b> {port.containerPort}</li>
+                                                <li><b>Protocol:</b> {port.protocol}</li>
+                                            </div>
+                                        ))}
+                                        </ul>
+                                        <span><b>CPU (limit):</b> {container.resources.limits.cpu}</span>
+                                        <span><b>Memory (limit):</b> {container.resources.limits.memory}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </Item>
                 </Grid>
             </StyledGrid>
         </StyledBox>
