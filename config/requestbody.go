@@ -10,5 +10,5 @@ type CreateDeploymentStruct struct {
 	ContainerName      string `json:"containerName"`
 	ContainerImageName string `json:"containerImageName"`
 	ContainerImageTag  string `json:"containerImageTag"`
-	ContainerPort      int32  `json:"containerPort"`
+	ContainerPort      string `json:"containerPort"`
 }

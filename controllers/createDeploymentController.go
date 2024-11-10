@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"strconv"
 
 	config "github.com/Ajsalemo/kubernetes-client-application/config"
 	"github.com/gofiber/fiber/v2"
@@ -22,6 +23,12 @@ func CreateDeployment(c *fiber.Ctx) error {
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
 	// Parse the request body into the createDeploymentStruct struct
 	if err := c.BodyParser(&createDeploymentStruct); err != nil {
+		zap.L().Error(err.Error())
+		return err
+	}
+
+	containerPort, err := strconv.ParseInt(createDeploymentStruct.ContainerPort, 10, 32)
+	if err != nil {
 		zap.L().Error(err.Error())
 		return err
 	}
@@ -52,7 +59,7 @@ func CreateDeployment(c *fiber.Ctx) error {
 								{
 									Name:          "http",
 									Protocol:      apiv1.ProtocolTCP,
-									ContainerPort: createDeploymentStruct.ContainerPort,
+									ContainerPort: int32(containerPort),
 								},
 							},
 						},

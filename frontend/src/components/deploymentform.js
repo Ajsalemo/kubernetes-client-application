@@ -3,6 +3,8 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import * as yup from "yup";
+import { useState } from 'react';
+import axios from 'axios';
 
 export const DeploymentForm = () => {
     const validationSchema = yup.object({
@@ -31,6 +33,30 @@ export const DeploymentForm = () => {
             .required("Container Port is required"),
     });
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("");
+    const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("");
+
+    const createDeployment = async (values) => {
+        try {
+            setIsLoading(true);
+            // Fetch all Deployment information from k8s
+            const res = await axios.post('http://localhost:3070/api/deployment/create', values);
+            if (res) {
+                setIsLoading(false);
+                console.log(isLoading);
+            }
+            setListDeploymentsErrorCode("");
+            setListDeploymentsErrorMessage("");
+        } catch (error) {
+            console.error(error.code);
+            console.error(error.message);
+            setListDeploymentsErrorCode(error.code);
+            setListDeploymentsErrorMessage(error.message);
+            setIsLoading(false);
+        }
+    }
+    
     const formik = useFormik({
         initialValues: {
             deploymentName: "",
@@ -41,9 +67,7 @@ export const DeploymentForm = () => {
             containerPort: ""
         },
         validationSchema: validationSchema,
-        onSubmit: (values) => {
-            alert(JSON.stringify(values, null, 2));
-        },
+        onSubmit: (values) => createDeployment(values)
     });
 
     return (
@@ -121,9 +145,11 @@ export const DeploymentForm = () => {
                     helperText={formik.touched.containerPort && formik.errors.containerPort}
                     style={{ marginBottom: '1rem' }}
                 />
-                <Button color="primary" variant="contained" fullWidth type="submit">
+                <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
                     Submit
                 </Button>
+                {listDeploymentsErrorCode && <div style={{ color: 'red', marginTop: '1rem' }}>Error code: {listDeploymentsErrorCode}</div>}
+                {listDeploymentsErrorMessage && <div style={{ color: 'red', marginTop: '1rem' }}>Error message: {listDeploymentsErrorMessage}</div>}
             </form>
         </Paper>
     )
