@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { useState } from 'react';
 import axios from 'axios';
 
-export const DeploymentForm = () => {
+export const DeploymentForm = ({ getListDeployments }) => {
     const validationSchema = yup.object({
         deploymentName: yup
             .string("Enter your deployment name")
@@ -43,6 +43,8 @@ export const DeploymentForm = () => {
             // Fetch all Deployment information from k8s
             const res = await axios.post('http://localhost:3070/api/deployment/create', values);
             if (res) {
+                // Get the updated list of deployments
+                await getListDeployments();
                 setIsLoading(false);
                 console.log(isLoading);
             }
@@ -51,8 +53,14 @@ export const DeploymentForm = () => {
         } catch (error) {
             console.error(error.code);
             console.error(error.message);
+            console.error(error);
             setListDeploymentsErrorCode(error.code);
-            setListDeploymentsErrorMessage(error.message);
+            if (error.response && error.response.data && error.response.data.error) {
+                console.error(error.response.data.error);
+                setListDeploymentsErrorMessage(error.response.data.error);
+            } else {
+                setListDeploymentsErrorMessage(error.message);
+            }
             setIsLoading(false);
         }
     }

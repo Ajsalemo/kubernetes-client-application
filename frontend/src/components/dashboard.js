@@ -19,9 +19,26 @@ export const Dashboard = () => {
         height: '100%',
     }));
 
+    const DeploymentItem = styled(Paper)(({ theme }) => ({
+        backgroundColor: '#fff',
+        ...theme.typography.body2,
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        ...theme.applyStyles('dark', {
+            backgroundColor: '#1A2027',
+        }),
+        height: '100%',
+        overflow: 'scroll'
+    }));
+
     const StyledGrid = styled(Grid)(() => ({
         backgroundColor: '#cfb6b6',
         height: '100%',
+    }));
+
+    const StyledDeploymentGrid = styled(Grid)(() => ({
+        maxHeight: '100%',
     }));
 
     const StyledBox = styled(Box)(() => ({
@@ -31,34 +48,38 @@ export const Dashboard = () => {
     }));
 
     const [listDeployments, setListDeployments] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("")
     const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("")
 
-    useEffect(() => {
-        const getListDeployments = async () => {
-            try {
-                // Fetch all Deployment information from k8s
-                const { data: { deployments } } = await axios.get('http://localhost:3070/api/deployment/list');
-                setListDeployments(deployments);
-            } catch (error) {
-                console.error(error.code);
-                console.error(error.message);
-                setListDeploymentsErrorCode(error.code);
-                setListDeploymentsErrorMessage(error.message);
-            }
+    const getListDeployments = async () => {
+        setIsLoading(true);
+        try {
+            // Fetch all Deployment information from k8s
+            const { data: { deployments } } = await axios.get('http://localhost:3070/api/deployment/list');
+            setListDeployments(deployments);
+            setIsLoading(false);
+        } catch (error) {
+            console.error(error.code);
+            console.error(error.message);
+            setListDeploymentsErrorCode(error.code);
+            setListDeploymentsErrorMessage(error.message);
+            setIsLoading(false);
         }
+    }
 
+    useEffect(() => {
         getListDeployments();
     }, []);
-    console.log(listDeployments);
+
     return (
         <StyledBox sx={{ flexGrow: 1 }}>
             <StyledGrid container spacing={{ xs: 2, md: 3 }}>
                 <Grid size={{ xs: 6 }}>
-                    <Item><DeploymentForm /></Item>
+                    <Item><DeploymentForm getListDeployments={getListDeployments} /></Item>
                 </Grid>
-                <Grid size={{ xs: 6 }}>
-                    <Item>
+                <StyledDeploymentGrid size={{ xs: 6 }}>
+                    <DeploymentItem>
                         {listDeploymentsErrorCode && <div style={{ color: 'red' }}>Error code: {listDeploymentsErrorCode}</div>}
                         {listDeploymentsErrorMessage && <div style={{ color: 'red' }}>Error message: {listDeploymentsErrorMessage}</div>}
                         {listDeployments.length > 0 ? listDeployments.map((deployment, index) => (
@@ -89,9 +110,9 @@ export const Dashboard = () => {
                                     </div>
                                 ))}
                             </div>
-                        )) : <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}><span>No deployments found</span></div>}
-                    </Item>
-                </Grid>
+                        )) : <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>}
+                    </DeploymentItem>
+                </StyledDeploymentGrid>
             </StyledGrid>
         </StyledBox>
     );
