@@ -17,7 +17,7 @@ func main() {
 	app.Use(cors.New())
 
 	app.Post("/api/deployment/create", controllers.CreateDeployment)
-	app.Post("/api/deployment/delete", controllers.DeleteDeployment)
+	app.Delete("/api/deployment/delete/:deployment", controllers.DeleteDeployment)
 	app.Get("/api/deployment/list", controllers.ListDeployments)
 	app.Get("/api/deployment/get/:deployment", controllers.GetDeployments)
 	app.Get("/api/pod/get/:pod", controllers.GetPods)

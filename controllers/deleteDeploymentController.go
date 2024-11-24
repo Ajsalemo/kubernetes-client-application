@@ -17,22 +17,24 @@ func DeleteDeployment(c *fiber.Ctx) error {
 		panic(err)
 	}
 
-	var deleteDeploymentStruct = config.DeleteDeploymentStruct{}
-	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
-	// Parse the request body into the k8sDeploymentName struct
-	if err := c.BodyParser(&deleteDeploymentStruct); err != nil {
-		zap.L().Error(err.Error())
-		return err
+	// Check if the parameter is empty - if so, return a 400 for bad request
+	if c.Params("deployment") == "" {
+		return c.Status(400).JSON(fiber.Map{"error": "Deployment name is required"})
 	}
 
+	deploymentName := c.Params("deployment")
+	zap.L().Info("User provided deployment name: " + deploymentName)
+
+	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
+
 	deletePolicy := metav1.DeletePropagationForeground
-	if err := deploymentsClient.Delete(context.TODO(), deleteDeploymentStruct.Name, metav1.DeleteOptions{
+	if err := deploymentsClient.Delete(context.TODO(), deploymentName, metav1.DeleteOptions{
 		PropagationPolicy: &deletePolicy,
 	}); err != nil {
 		zap.L().Error(err.Error())
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	zap.L().Info("Deleted deployment " + deleteDeploymentStruct.Name)
-	return c.JSON(fiber.Map{"message": "Deleted deployment " + deleteDeploymentStruct.Name})
+	zap.L().Info("Deleted deployment " + deploymentName)
+	return c.JSON(fiber.Map{"message": "Deleted deployment " + deploymentName})
 }

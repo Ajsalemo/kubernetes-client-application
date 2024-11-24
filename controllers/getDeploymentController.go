@@ -22,11 +22,13 @@ func GetDeployments(c *fiber.Ctx) error {
 	if c.Params("deployment") == "" {
 		return c.Status(400).JSON(fiber.Map{"error": "Deployment name is required"})
 	}
-	zap.L().Info("User provided deployment name: " + c.Params("deployment"))
+
+	deploymentName := c.Params("deployment")
+	zap.L().Info("User provided deployment name: " + deploymentName)
 
 	deploymentsClient := clientset.AppsV1().Deployments(apiv1.NamespaceDefault)
 	listOptions := metav1.ListOptions{
-		FieldSelector: fmt.Sprintf("metadata.name=%s", c.Params("deployment")),
+		FieldSelector: fmt.Sprintf("metadata.name=%s", deploymentName),
 	}
 	getDeployment, err := deploymentsClient.List(context.TODO(), metav1.ListOptions{FieldSelector: listOptions.FieldSelector})
 
