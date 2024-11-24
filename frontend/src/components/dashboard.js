@@ -51,12 +51,13 @@ export const Dashboard = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("")
     const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("")
+    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
 
     const getListDeployments = async () => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
-            const { data: { deployments } } = await axios.get('http://localhost:3070/api/deployment/list');
+            const { data: { deployments } } = await axios.get(`${backendApiURL}/api/deployment/list`);
             setListDeployments(deployments);
             setIsLoading(false);
         } catch (error) {
@@ -65,6 +66,29 @@ export const Dashboard = () => {
             setListDeploymentsErrorCode(error.code);
             setListDeploymentsErrorMessage(error.message);
             setIsLoading(false);
+        }
+    }
+
+    const deleteDeployment = async (deploymentName) => {
+        try {
+            // Fetch all Deployment information from k8s
+            const res = await axios.delete(`${backendApiURL}/api/deployment/delete/${deploymentName}`);
+            if (res) {
+                // Get the updated list of deployments
+                await getListDeployments();
+            }
+            setListDeploymentsErrorCode("");
+            setListDeploymentsErrorMessage("");
+        } catch (error) {
+            console.error(error.code);
+            console.error(error.message);
+            setListDeploymentsErrorCode(error.code);
+            if (error.response && error.response.data && error.response.data.error) {
+                console.error(error.response.data.error);
+                setListDeploymentsErrorMessage(error.response.data.error);
+            } else {
+                setListDeploymentsErrorMessage(error.message);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import * as yup from "yup";
 import { useState } from 'react';
@@ -36,12 +37,13 @@ export const DeploymentForm = ({ getListDeployments }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("");
     const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("");
+    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
 
     const createDeployment = async (values) => {
         try {
             setIsLoading(true);
             // Fetch all Deployment information from k8s
-            const res = await axios.post('http://localhost:3070/api/deployment/create', values);
+            const res = await axios.post(`${backendApiURL}/api/deployment/create`, values);
             if (res) {
                 // Get the updated list of deployments
                 await getListDeployments();
@@ -64,7 +66,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
             setIsLoading(false);
         }
     }
-    
+
     const formik = useFormik({
         initialValues: {
             deploymentName: "",
@@ -154,7 +156,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     style={{ marginBottom: '1rem' }}
                 />
                 <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
-                    Submit
+                    {isLoading ? <CircularProgress color="primary" /> : "Submit"}
                 </Button>
                 {listDeploymentsErrorCode && <div style={{ color: 'red', marginTop: '1rem' }}>Error code: {listDeploymentsErrorCode}</div>}
                 {listDeploymentsErrorMessage && <div style={{ color: 'red', marginTop: '1rem' }}>Error message: {listDeploymentsErrorMessage}</div>}
