@@ -48,7 +48,6 @@ export const DeploymentForm = ({ getListDeployments }) => {
                 // Get the updated list of deployments
                 await getListDeployments();
                 setIsLoading(false);
-                console.log(isLoading);
             }
             setListDeploymentsErrorCode("");
             setListDeploymentsErrorMessage("");
