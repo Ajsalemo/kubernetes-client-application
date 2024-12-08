@@ -4,12 +4,12 @@ import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import TextField from "@mui/material/TextField";
 import * as yup from "yup";
-import { useState } from 'react';
-import axios from 'axios';
-import Radio from '@mui/material/Radio';
-import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Grid from '@mui/material/Grid2';
+import { useState } from "react";
+import axios from "axios";
+import Radio from "@mui/material/Radio";
+import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid2";
 
 export const DeploymentForm = ({ getListDeployments }) => {
     const validationSchema = yup.object({
@@ -36,20 +36,24 @@ export const DeploymentForm = ({ getListDeployments }) => {
         containerPort: yup
             .number("Enter your container port")
             .required("Container Port is required"),
-        registryUsername: yup
-            .string("Enter your registry username")
-            .min(1, "Registry Username should be of minimum 1 character length")
-            .required("Registry Username is required"),
-        registryPassword: yup
-            .string("Enter your registry password")
-            .min(1, "Registry Password should be of minimum 1 character length")
-            .required("Registry Password is required")
+        registryUsername: yup.string().when("registryType", {
+            is: "private",
+            then: () => yup.string("Enter your registry username").required("Registry username is required")
+                .min(1, "Registry Username should be of minimum 1 character length")
+                .required("Registry Username is required"),
+        }),
+        registryPassword: yup.string().when("registryType", {
+            is: "private",
+            then: () => yup.string("Enter your registry password").required("Registry password is required")
+                .min(1, "Registry password should be of minimum 1 character length")
+                .required("Registry password is required"),
+        }),
     });
 
     const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("");
     const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("");
-    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
+    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? "http://localhost:3070";
 
     const createDeployment = async (values) => {
         console.log(values);
@@ -83,7 +87,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
         const radioGroup = useRadioGroup();
 
         let checked = false;
-        console.log(props);
+        console.log(radioGroup);
         if (radioGroup) {
             checked = radioGroup.value === props.value;
         }
@@ -101,12 +105,12 @@ export const DeploymentForm = ({ getListDeployments }) => {
             containerPort: "",
             registryUsername: "",
             registryPassword: "",
-            registryType: ""
+            registryType: "public",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => createDeployment(values)
     });
-
+    console.log(formik);
     return (
         <Paper>
             <form onSubmit={formik.handleSubmit}>
@@ -120,7 +124,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.deploymentName && Boolean(formik.errors.deploymentName)}
                     helperText={formik.touched.deploymentName && formik.errors.deploymentName}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                 />
                 <TextField
                     fullWidth
@@ -132,7 +136,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.deploymentLabel && Boolean(formik.errors.deploymentLabel)}
                     helperText={formik.touched.deploymentLabel && formik.errors.deploymentLabel}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                 />
                 <TextField
                     fullWidth
@@ -144,7 +148,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.containerName && Boolean(formik.errors.containerName)}
                     helperText={formik.touched.containerName && formik.errors.containerName}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                 />
                 <TextField
                     fullWidth
@@ -156,7 +160,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.containerImageName && Boolean(formik.errors.containerImageName)}
                     helperText={formik.touched.containerImageName && formik.errors.containerImageName}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                 />
                 <TextField
                     fullWidth
@@ -168,7 +172,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.containerImageTag && Boolean(formik.errors.containerImageTag)}
                     helperText={formik.touched.containerImageTag && formik.errors.containerImageTag}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                 />
                 <Grid display="flex" justifyContent="flex-start">
                     <RadioGroup
@@ -176,6 +180,8 @@ export const DeploymentForm = ({ getListDeployments }) => {
                         aria-labelledby="demo-controlled-radio-buttons-group"
                         name="registryType"
                         id="registryType"
+                        onBlur={formik.handleBlur}
+                        value={formik.values.registryType}
                         onChange={formik.handleChange}
                         defaultValue="public"
                     >
@@ -194,7 +200,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.registryUsername && Boolean(formik.errors.registryUsername)}
                     helperText={formik.touched.registryUsername && formik.errors.registryUsername}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                 />}
                 {formik.values.registryType === "private" && <TextField
                     fullWidth
@@ -206,7 +212,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.registryPassword && Boolean(formik.errors.registryPassword)}
                     helperText={formik.touched.registryPassword && formik.errors.registryPassword}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                     type="password"
                 />}
                 <TextField
@@ -219,15 +225,15 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.containerPort && Boolean(formik.errors.containerPort)}
                     helperText={formik.touched.containerPort && formik.errors.containerPort}
-                    style={{ marginBottom: '1rem' }}
+                    style={{ marginBottom: "1rem" }}
                 />
                 <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
                     {isLoading ? <CircularProgress color="primary" /> : "Submit"}
                 </Button>
-                {listDeploymentsErrorCode && <div style={{ color: 'red', marginTop: '1rem' }}>Error code: {listDeploymentsErrorCode}</div>}
-                {listDeploymentsErrorMessage && <div style={{ color: 'red', marginTop: '1rem' }}>Error message: {listDeploymentsErrorMessage}</div>}
+                {listDeploymentsErrorCode && <div style={{ color: "red", marginTop: "1rem" }}>Error code: {listDeploymentsErrorCode}</div>}
+                {listDeploymentsErrorMessage && <div style={{ color: "red", marginTop: "1rem" }}>Error message: {listDeploymentsErrorMessage}</div>}
             </form>
-        </Paper>
+        </Paper >
     )
 }
 
