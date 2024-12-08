@@ -6,6 +6,10 @@ import TextField from "@mui/material/TextField";
 import * as yup from "yup";
 import { useState } from 'react';
 import axios from 'axios';
+import Radio from '@mui/material/Radio';
+import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid2';
 
 export const DeploymentForm = ({ getListDeployments }) => {
     const validationSchema = yup.object({
@@ -32,6 +36,14 @@ export const DeploymentForm = ({ getListDeployments }) => {
         containerPort: yup
             .number("Enter your container port")
             .required("Container Port is required"),
+        registryUsername: yup
+            .string("Enter your registry username")
+            .min(1, "Registry Username should be of minimum 1 character length")
+            .required("Registry Username is required"),
+        registryPassword: yup
+            .string("Enter your registry password")
+            .min(1, "Registry Password should be of minimum 1 character length")
+            .required("Registry Password is required")
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +52,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
     const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
 
     const createDeployment = async (values) => {
+        console.log(values);
         try {
             setIsLoading(true);
             // Fetch all Deployment information from k8s
@@ -66,6 +79,18 @@ export const DeploymentForm = ({ getListDeployments }) => {
         }
     }
 
+    const CustomRadioFormControlLabelComponent = (props) => {
+        const radioGroup = useRadioGroup();
+
+        let checked = false;
+        console.log(props);
+        if (radioGroup) {
+            checked = radioGroup.value === props.value;
+        }
+
+        return <FormControlLabel checked={checked} {...props} />
+    }
+
     const formik = useFormik({
         initialValues: {
             deploymentName: "",
@@ -73,7 +98,10 @@ export const DeploymentForm = ({ getListDeployments }) => {
             containerName: "",
             containerImageName: "",
             containerImageTag: "",
-            containerPort: ""
+            containerPort: "",
+            registryUsername: "",
+            registryPassword: "",
+            registryType: ""
         },
         validationSchema: validationSchema,
         onSubmit: (values) => createDeployment(values)
@@ -142,6 +170,45 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     helperText={formik.touched.containerImageTag && formik.errors.containerImageTag}
                     style={{ marginBottom: '1rem' }}
                 />
+                <Grid display="flex" justifyContent="flex-start">
+                    <RadioGroup
+                        row
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="registryType"
+                        id="registryType"
+                        onChange={formik.handleChange}
+                        defaultValue="public"
+                    >
+                        <CustomRadioFormControlLabelComponent control={<Radio />} label="Public image" value="public" />
+                        <CustomRadioFormControlLabelComponent control={<Radio />} label="Private image" value="private" />
+                    </RadioGroup>
+                </Grid>
+                {/* If a private image is used, ask for a username and password for registry authentication */}
+                {formik.values.registryType === "private" && <TextField
+                    fullWidth
+                    id="registryUsername"
+                    name="registryUsername"
+                    label="Registry Username"
+                    value={formik.values.registryUsername}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.registryUsername && Boolean(formik.errors.registryUsername)}
+                    helperText={formik.touched.registryUsername && formik.errors.registryUsername}
+                    style={{ marginBottom: '1rem' }}
+                />}
+                {formik.values.registryType === "private" && <TextField
+                    fullWidth
+                    id="registryPassword"
+                    name="registryPassword"
+                    label="Registry Password"
+                    value={formik.values.registryPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.registryPassword && Boolean(formik.errors.registryPassword)}
+                    helperText={formik.touched.registryPassword && formik.errors.registryPassword}
+                    style={{ marginBottom: '1rem' }}
+                    type="password"
+                />}
                 <TextField
                     fullWidth
                     id="containerPort"
