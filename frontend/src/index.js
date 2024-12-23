@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Dashboard } from './components/dashboard';
 import reportWebVitals from './reportWebVitals';
 import CssBaseline from '@mui/material/CssBaseline';
+import { RouteBase } from "./components/routebase"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <React.Fragment>
       <CssBaseline />
-      <Dashboard />
+      <RouteBase />
     </React.Fragment>
   </React.StrictMode>
 );
