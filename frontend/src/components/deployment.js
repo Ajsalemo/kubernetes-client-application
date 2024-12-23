@@ -97,7 +97,7 @@ export const Deployment = () => {
         <StyledBox sx={{ flexGrow: 1 }}>
             <Grid style={{ backgroundColor: '#cfb6b6', height: '100vh' }}>
                 <Grid style={{ maxHeight: '100%' }}>
-                    <AppBar position="static" style={{ backgroundColor: '#1A2027'}}>
+                    <AppBar position="static" style={{ backgroundColor: '#1A2027' }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
                                 <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>Home</Link>
@@ -114,9 +114,11 @@ export const Deployment = () => {
                             >
                                 <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify' }}>
                                     <div>
-                                        <Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none' }}>Deployment metadata</Link>
-                                        <Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none' }}>Deployment spec</Link>
-                                        <Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none' }}>Deployment status</Link></div>
+                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment metadata</Link></Button>
+                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment spec</Link></Button>
+                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment status</Link></Button>
+                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/pods/${deployment.metadata.name}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>View pods</Link></Button>
+                                    </div>
                                     <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
                                         <span id="metadata"><b>Deployment metadata</b></span>
                                         <pre>{JSON.stringify(deployment.metadata, null, 2)}</pre>
@@ -136,7 +138,9 @@ export const Deployment = () => {
                             </div>
                         )) : <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>}
                     </DeploymentItem>
-                    <Button variant="contained" color="primary" style={{ margin: '1rem 0 1rem 1rem' }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>Scroll to top</Button>
+                    {listDeployment.length > 0 && (
+                        <Button variant="contained" color="primary" style={{ margin: '1rem 0 1rem 1rem' }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>Scroll to top</Button>
+                    )}
                 </Grid>
             </Grid>
         </StyledBox>
