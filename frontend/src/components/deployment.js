@@ -29,7 +29,6 @@ export const Deployment = () => {
     const StyledBox = styled(Box)(() => ({
         backgroundColor: '#cfb6b6',
         height: '100vh',
-        padding: '1rem',
     }));
 
     const [listDeployment, setListDeployment] = useState([])
@@ -124,6 +123,7 @@ export const Deployment = () => {
                             </div>
                         )) : <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>}
                     </DeploymentItem>
+                    <Button variant="contained" color="primary" style={{ margin: '1rem 0 1rem 1rem' }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>Scroll to top</Button>
                 </Grid>
             </Grid>
         </StyledBox>
