@@ -7,10 +7,11 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from "react-router";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const Deployment = () => {
     const params = useParams();
+    const navigate = useNavigate();
     const deploymentName = params.deployment
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
@@ -31,14 +32,13 @@ export const Deployment = () => {
         padding: '1rem',
     }));
 
-
     const [listDeployment, setListDeployment] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentErrorCode, setListDeploymentErrorCode] = useState("")
     const [listDeploymentErrorMessage, setListDeploymentErrorMessage] = useState("")
     const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
 
-    const getListDeployment = async () => {
+    const getDeployment = async () => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
@@ -57,15 +57,16 @@ export const Deployment = () => {
         }
     }
 
-    const deleteDeployment = async (deploymentName) => {
+    const deleteSpecificDeployment = async (deploymentName) => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
             const res = await axios.delete(`${backendApiURL}/api/deployment/delete/${deploymentName}`);
             if (res) {
                 // Get the updated list of deployments
-                await getListDeployment();
+                await getDeployment();
                 setIsLoading(false);
+                navigate("/")
             }
             setListDeploymentErrorCode("");
             setListDeploymentErrorMessage("");
@@ -84,8 +85,7 @@ export const Deployment = () => {
     }
 
     useEffect(() => {
-        getListDeployment();
-        console.log(listDeployment)
+        getDeployment();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -104,7 +104,7 @@ export const Deployment = () => {
                                 style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}
                             >
                                 <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify' }}>
-                                    <div><Link to="#metadata" style={{ margin: '0 1rem'}}>Deployment metadata</Link><Link to="#spec" style={{ margin: '0 1rem'}}>Deployment spec</Link><Link to="#status" style={{ margin: '0 1rem'}}>Deployment status</Link></div>
+                                    <div><Link to="#metadata" style={{ margin: '0 1rem' }}>Deployment metadata</Link><Link to="#spec" style={{ margin: '0 1rem' }}>Deployment spec</Link><Link to="#status" style={{ margin: '0 1rem' }}>Deployment status</Link></div>
                                     <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
                                         <span id="metadata"><b>Deployment metadata</b></span>
                                         <pre>{JSON.stringify(deployment.metadata, null, 2)}</pre>
@@ -117,14 +117,9 @@ export const Deployment = () => {
                                         <span id="status"><b>Deployment status</b></span>
                                         <pre>{JSON.stringify(deployment.status, null, 2)}</pre>
                                     </div>
-                                    <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000', width: '100%', display: 'flex', alignItems: 'flex-start' }}>
-                                        {/* <Button variant="contained" color="primary" style={{ 'marginTop': '1rem' }}>
-                                            <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: '#fff' }}>View deployment</Link>
-                                        </Button> */}
-                                    </div>
                                 </Grid>
                                 <Grid size={{ xs: 2 }}>
-                                    <Button variant="contained" color="error" onClick={() => deleteDeployment(deploymentName.metadata.name)} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
+                                    <Button variant="contained" color="error" onClick={() => deleteSpecificDeployment(deployment.metadata.name)} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                 </Grid>
                             </div>
                         )) : <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>}
