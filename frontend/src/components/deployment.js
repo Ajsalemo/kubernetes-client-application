@@ -1,9 +1,12 @@
 import { Button } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from '@mui/material/Grid2';
 import Paper from '@mui/material/Paper';
 import { experimentalStyled as styled } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from "react-router";
@@ -94,6 +97,13 @@ export const Deployment = () => {
         <StyledBox sx={{ flexGrow: 1 }}>
             <Grid style={{ backgroundColor: '#cfb6b6', height: '100vh' }}>
                 <Grid style={{ maxHeight: '100%' }}>
+                    <AppBar position="static" style={{ backgroundColor: '#1A2027'}}>
+                        <Toolbar variant="dense">
+                            <Typography variant="h6" component="div">
+                                <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>Home</Link>
+                            </Typography>
+                        </Toolbar>
+                    </AppBar>
                     <DeploymentItem>
                         {listDeploymentErrorCode && <div style={{ color: 'red' }}>Error code: {listDeploymentErrorCode}</div>}
                         {listDeploymentErrorMessage && <div style={{ color: 'red' }}>Error message: {listDeploymentErrorMessage}</div>}
@@ -103,7 +113,10 @@ export const Deployment = () => {
                                 style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}
                             >
                                 <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify' }}>
-                                    <div><Link to="#metadata" style={{ margin: '0 1rem' }}>Deployment metadata</Link><Link to="#spec" style={{ margin: '0 1rem' }}>Deployment spec</Link><Link to="#status" style={{ margin: '0 1rem' }}>Deployment status</Link></div>
+                                    <div>
+                                        <Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none' }}>Deployment metadata</Link>
+                                        <Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none' }}>Deployment spec</Link>
+                                        <Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none' }}>Deployment status</Link></div>
                                     <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
                                         <span id="metadata"><b>Deployment metadata</b></span>
                                         <pre>{JSON.stringify(deployment.metadata, null, 2)}</pre>

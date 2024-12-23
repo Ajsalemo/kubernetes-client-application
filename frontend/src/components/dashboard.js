@@ -138,7 +138,7 @@ export const Dashboard = () => {
                                     ))}
                                     <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000', width: '100%', display: 'flex', alignItems: 'flex-start' }}>
                                         <Button variant="contained" color="primary" style={{ 'marginTop': '1rem' }}>
-                                            <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: '#fff' }}>View deployment</Link>
+                                            <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: '#fff', textDecoration: 'none' }}>View deployment</Link>
                                         </Button>
                                     </div>
                                 </Grid>
