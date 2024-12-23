@@ -6,6 +6,7 @@ import Paper from '@mui/material/Paper';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Link } from "react-router";
 import { useParams } from "react-router-dom";
 
 export const Deployment = () => {
@@ -41,7 +42,7 @@ export const Deployment = () => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
-            const { data: { deployments }} = await axios.get(`${backendApiURL}/api/deployment/get/${deploymentName}`);
+            const { data: { deployments } } = await axios.get(`${backendApiURL}/api/deployment/get/${deploymentName}`);
             console.log(deployments)
             setListDeployment(deployments);
             setIsLoading(false);
@@ -102,29 +103,20 @@ export const Deployment = () => {
                                 key={index}
                                 style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}
                             >
-                                <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                    <span><b>Deployment name:</b> {deployment.metadata && deployment.metadata.name}</span>
-                                    <span><b>Replica count:</b> {deployment.spec && deployment.spec.replicas}</span>
-                                    <span><b>terminationGracePeriodSeconds:</b> {deployment.spec && deployment.spec.terminationGracePeriodSeconds}</span>
-                                    <span><b>restartPolicy:</b> {deployment.spec && deployment.spec.template.spec.restartPolicy}</span>
-                                    {deployment.spec.template.spec.containers && deployment.spec.template.spec.containers.map((container, index) => (
-                                        <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                            <span><b>Container name:</b> {container && container.name}</span>
-                                            <span><b>Image:</b> {container && container.image}</span>
-                                            <span><b>imagePullPolicy:</b> {container && container.imagePullPolicy}</span>
-                                            <ul style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                                <b>Ports:</b>
-                                                {container.ports && container.ports.map((port, index) => (
-                                                    <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingLeft: '2rem' }}>
-                                                        <li><b>Container Port:</b> {port && port.containerPort}</li>
-                                                        <li><b>Protocol:</b> {port && port.protocol}</li>
-                                                    </div>
-                                                ))}
-                                            </ul>
-                                            <span><b>CPU (limit):</b> {container.resources.limits && container.resources.limits.cpu}</span>
-                                            <span><b>Memory (limit):</b> {container.resources.limits && container.resources.limits.memory}</span>
-                                        </div>
-                                    ))}
+                                <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify' }}>
+                                    <div><Link to="#metadata" style={{ margin: '0 1rem'}}>Deployment metadata</Link><Link to="#spec" style={{ margin: '0 1rem'}}>Deployment spec</Link><Link to="#status" style={{ margin: '0 1rem'}}>Deployment status</Link></div>
+                                    <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                        <span id="metadata"><b>Deployment metadata</b></span>
+                                        <pre>{JSON.stringify(deployment.metadata, null, 2)}</pre>
+                                    </div>
+                                    <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                        <span id="spec"><b>Deployment spec</b></span>
+                                        <pre>{JSON.stringify(deployment.spec, null, 2)}</pre>
+                                    </div>
+                                    <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                        <span id="status"><b>Deployment status</b></span>
+                                        <pre>{JSON.stringify(deployment.status, null, 2)}</pre>
+                                    </div>
                                     <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000', width: '100%', display: 'flex', alignItems: 'flex-start' }}>
                                         {/* <Button variant="contained" color="primary" style={{ 'marginTop': '1rem' }}>
                                             <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: '#fff' }}>View deployment</Link>
