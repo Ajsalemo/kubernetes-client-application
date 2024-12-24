@@ -1,15 +1,16 @@
-import { useFormik } from "formik";
-import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import TextField from "@mui/material/TextField";
-import * as yup from "yup";
-import { useState } from "react";
-import axios from "axios";
-import Radio from "@mui/material/Radio";
-import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid2";
+import Paper from "@mui/material/Paper";
+import Radio from "@mui/material/Radio";
+import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
+import TextField from "@mui/material/TextField";
+import axios from "axios";
+import { useFormik } from "formik";
+import { useState } from "react";
+import * as yup from "yup";
+import { backendApiURL } from "../utils/constants";
 
 export const DeploymentForm = ({ getListDeployments }) => {
     const validationSchema = yup.object({
@@ -36,6 +37,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
         containerPort: yup
             .number("Enter your container port")
             .required("Container Port is required"),
+        replicaCount: yup
+            .number("Enter your replica count")
+            .required("Replica count is required"),
         registryUsername: yup.string().when("registryType", {
             is: "private",
             then: () => yup.string("Enter your registry username").required("Registry username is required")
@@ -53,10 +57,8 @@ export const DeploymentForm = ({ getListDeployments }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("");
     const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("");
-    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? "http://localhost:3070";
 
     const createDeployment = async (values) => {
-        console.log(values);
         try {
             setIsLoading(true);
             // Fetch all Deployment information from k8s
@@ -69,8 +71,6 @@ export const DeploymentForm = ({ getListDeployments }) => {
             setListDeploymentsErrorCode("");
             setListDeploymentsErrorMessage("");
         } catch (error) {
-            console.error(error.code);
-            console.error(error.message);
             console.error(error);
             setListDeploymentsErrorCode(error.code);
             if (error.response && error.response.data && error.response.data.error) {
@@ -103,6 +103,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
             containerImageName: "",
             containerImageTag: "",
             containerPort: "",
+            replicaCount: "",
             registryUsername: "",
             registryPassword: "",
             registryType: "public",
@@ -227,13 +228,25 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     helperText={formik.touched.containerPort && formik.errors.containerPort}
                     style={{ marginBottom: "1rem" }}
                 />
+                <TextField
+                    fullWidth
+                    id="replicaCount"
+                    name="replicaCount"
+                    label="Replica Count"
+                    value={formik.values.replicaCount}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.replicaCount && Boolean(formik.errors.replicaCount)}
+                    helperText={formik.touched.replicaCount && formik.errors.replicaCount}
+                    style={{ marginBottom: "1rem" }}
+                />
                 <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
                     {isLoading ? <CircularProgress color="primary" /> : "Submit"}
                 </Button>
                 {listDeploymentsErrorCode && <div style={{ color: "red", marginTop: "1rem" }}>Error code: {listDeploymentsErrorCode}</div>}
                 {listDeploymentsErrorMessage && <div style={{ color: "red", marginTop: "1rem" }}>Error message: {listDeploymentsErrorMessage}</div>}
             </form>
-        </Paper >
+        </Paper>
     )
 }
 

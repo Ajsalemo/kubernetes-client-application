@@ -35,13 +35,6 @@ export const Dashboard = () => {
         overflow: 'scroll'
     }));
 
-    const StyledBox = styled(Box)(() => ({
-        backgroundColor: '#cfb6b6',
-        height: '100vh',
-        padding: '1rem',
-    }));
-
-
     const [listDeployments, setListDeployments] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("")
@@ -99,7 +92,7 @@ export const Dashboard = () => {
     }, []);
 
     return (
-        <StyledBox sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#cfb6b6', height: '100vh', padding: '1rem' }}>
             <Grid container spacing={{ xs: 2, md: 3 }} style={{ backgroundColor: '#cfb6b6', height: '100vh' }}>
                 <Grid size={{ xs: 6 }}>
                     <Item><DeploymentForm getListDeployments={getListDeployments} /></Item>
@@ -151,7 +144,7 @@ export const Dashboard = () => {
                     </DeploymentItem>
                 </Grid>
             </Grid>
-        </StyledBox>
+        </Box>
     );
 }
 

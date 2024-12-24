@@ -11,6 +11,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from "react-router";
 import { useNavigate, useParams } from "react-router-dom";
+import { backendApiURL } from "../utils/constants";
 
 export const Deployment = () => {
     const params = useParams();
@@ -29,30 +30,22 @@ export const Deployment = () => {
         height: '100%',
     }));
 
-    const StyledBox = styled(Box)(() => ({
-        backgroundColor: '#cfb6b6',
-        height: '100vh',
-    }));
-
     const [listDeployment, setListDeployment] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [listDeploymentErrorCode, setListDeploymentErrorCode] = useState("")
     const [listDeploymentErrorMessage, setListDeploymentErrorMessage] = useState("")
-    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
 
     const getDeployment = async () => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
             const { data: { deployments } } = await axios.get(`${backendApiURL}/api/deployment/get/${deploymentName}`);
-            console.log(deployments)
             setListDeployment(deployments);
             setIsLoading(false);
             setListDeploymentErrorCode("");
             setListDeploymentErrorMessage("");
         } catch (error) {
-            console.error(error.code);
-            console.error(error.message);
+            console.error(error);
             setListDeploymentErrorCode(error.code);
             setListDeploymentErrorMessage(error.message);
             setIsLoading(false);
@@ -73,8 +66,7 @@ export const Deployment = () => {
             setListDeploymentErrorCode("");
             setListDeploymentErrorMessage("");
         } catch (error) {
-            console.error(error.code);
-            console.error(error.message);
+            console.error(error);
             setListDeploymentErrorCode(error.code);
             if (error.response && error.response.data && error.response.data.error) {
                 console.error(error.response.data.error);
@@ -91,10 +83,8 @@ export const Deployment = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    console.log(listDeployment)
-
     return (
-        <StyledBox sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#cfb6b6', height: '100vh', padding: '1rem' }}>
             <Grid style={{ backgroundColor: '#cfb6b6', height: '100vh' }}>
                 <Grid style={{ maxHeight: '100%' }}>
                     <AppBar position="static" style={{ backgroundColor: '#1A2027' }}>
@@ -117,7 +107,7 @@ export const Deployment = () => {
                                         <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment metadata</Link></Button>
                                         <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment spec</Link></Button>
                                         <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment status</Link></Button>
-                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/pods/${deployment.metadata.name}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>View pods</Link></Button>
+                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>View pods</Link></Button>
                                     </div>
                                     <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
                                         <span id="metadata"><b>Deployment metadata</b></span>
@@ -143,6 +133,6 @@ export const Deployment = () => {
                     )}
                 </Grid>
             </Grid>
-        </StyledBox>
+        </Box>
     )
 }

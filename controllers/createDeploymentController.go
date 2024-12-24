@@ -33,21 +33,29 @@ func CreateDeployment(c *fiber.Ctx) error {
 		return err
 	}
 
+	replicaCount, err := strconv.ParseInt(createDeploymentStruct.ReplicaCount, 10, 32)
+	if err != nil {
+		zap.L().Error(err.Error())
+		return err
+	}
+
 	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: createDeploymentStruct.DeploymentName,
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: config.Int32Ptr(1),
+			Replicas: config.Int32Ptr(int32(replicaCount)),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
 					"app": createDeploymentStruct.DeploymentLabel,
+					"owner": createDeploymentStruct.DeploymentName,
 				},
 			},
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
 						"app": createDeploymentStruct.DeploymentLabel,
+						"owner": createDeploymentStruct.DeploymentName,
 					},
 				},
 				Spec: apiv1.PodSpec{

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 
 	config "github.com/Ajsalemo/kubernetes-client-application/config"
 	"github.com/gofiber/fiber/v2"
@@ -18,24 +17,32 @@ func GetPods(c *fiber.Ctx) error {
 		zap.L().Error(err.Error())
 		panic(err)
 	}
-	// Check if the parameter is empty - if so, return a 400 for bad request
-	if c.Params("pod") == "" {
-		return c.Status(400).JSON(fiber.Map{"error": "Name is required"})
+	// Check if the parameters are empty - if so, return a 400 for bad request
+	if c.Params("label") == "" {
+		return c.Status(400).JSON(fiber.Map{"error": "Label name is required"})
+	}
+	// Check if the parameters are empty - if so, return a 400 for bad request
+	if c.Params("deployment") == "" {
+		return c.Status(400).JSON(fiber.Map{"error": "Deployment name is required"})
 	}
 	zap.L().Info("User provided deployment name: " + c.Params("deployment"))
+	zap.L().Info("User provided label name: " + c.Params("label"))
 
 	podsClient := clientset.CoreV1().Pods(apiv1.NamespaceDefault)
-	listOptions := metav1.ListOptions{
-		LabelSelector: fmt.Sprintf("app=%s", c.Params("pod")),
-	}
+	// listOptions := metav1.ListOptions{
+	// 	LabelSelector: fmt.Sprintf("app=%s", c.Params("label")),
+	// }
 
-	getPods, err := podsClient.List(context.TODO(), metav1.ListOptions{LabelSelector: listOptions.LabelSelector})
+	labelSelector := metav1.LabelSelector{MatchLabels: map[string]string{"app": c.Params("label"), "owner": c.Params("deployment")}}
+	listOptions := metav1.ListOptions{LabelSelector: metav1.FormatLabelSelector(&labelSelector)}
+
+	getPods, err := podsClient.List(context.TODO(), listOptions)
 
 	if err != nil {
 		zap.L().Error(err.Error())
 		return c.Status(500).JSON(fiber.Map{"error": err.Error()})
 	}
-	// Log the deployment names
+	// Log the pod names
 	for _, d := range getPods.Items {
 		zap.L().Info(" * " + d.GetName())
 	}

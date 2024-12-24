@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Dashboard } from "./dashboard";
-import { ScrollToAnchor } from "./scrollToAnchor"
 import { Deployment } from "./deployment";
-import { ListAllPods } from "./listallpods";
+import { ListAllPodsForDeployment } from "./listallpodsfordeployment";
+import { ScrollToAnchor } from "./scrollToAnchor";
 
 export const RouteBase = () => (
     <BrowserRouter>
@@ -10,7 +10,7 @@ export const RouteBase = () => (
         <Routes>
             <Route path="/" Component={Dashboard} />
             <Route path="/deployment/:deployment" Component={Deployment} />
-            <Route path="/deployment/pods/:deployment" Component={ListAllPods} />
+            <Route path="/deployment/:deployment/pods/:app" Component={ListAllPodsForDeployment} />
         </Routes>
     </BrowserRouter>
 )

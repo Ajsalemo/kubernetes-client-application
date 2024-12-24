@@ -20,7 +20,7 @@ func main() {
 	app.Delete("/api/deployment/delete/:deployment", controllers.DeleteDeployment)
 	app.Get("/api/deployment/list", controllers.ListDeployments)
 	app.Get("/api/deployment/get/:deployment", controllers.GetDeployments)
-	app.Get("/api/pod/get/:pod", controllers.GetPods)
+	app.Get("/api/deployment/list/:deployment/pods/:label", controllers.GetPods)
 	// Check if .kubeconfig is accessible at startup
 	_, kubeErr := config.KubeConfig()
 	if kubeErr != nil {
