@@ -11,26 +11,26 @@ import (
 )
 
 // Get a specific deployment
-func GetPods(c *fiber.Ctx) error {
+func GetSpecificPod(c *fiber.Ctx) error {
 	clientset, err := config.KubeConfig()
 	if err != nil {
 		zap.L().Error(err.Error())
 		panic(err)
 	}
 	// Check if the parameters are empty - if so, return a 400 for bad request
-	if c.Params("label") == "" {
-		return c.Status(400).JSON(fiber.Map{"error": "Label name is required"})
+	if c.Params("pod") == "" {
+		return c.Status(400).JSON(fiber.Map{"error": "Pod name is required"})
 	}
 	// Check if the parameters are empty - if so, return a 400 for bad request
 	if c.Params("deployment") == "" {
 		return c.Status(400).JSON(fiber.Map{"error": "Deployment name is required"})
 	}
 	zap.L().Info("User provided deployment name: " + c.Params("deployment"))
-	zap.L().Info("User provided label name: " + c.Params("label"))
+	zap.L().Info("User provided label name: " + c.Params("pod"))
 
 	podsClient := clientset.CoreV1().Pods(apiv1.NamespaceDefault)
-	labelSelector := metav1.LabelSelector{MatchLabels: map[string]string{"app": c.Params("label"), "owner": c.Params("deployment")}}
-	listOptions := metav1.ListOptions{LabelSelector: metav1.FormatLabelSelector(&labelSelector)}
+	labelSelector := metav1.LabelSelector{MatchLabels: map[string]string{"owner": c.Params("deployment")}}
+	listOptions := metav1.ListOptions{LabelSelector: metav1.FormatLabelSelector(&labelSelector), FieldSelector: "metadata.name=" + c.Params("pod")}
 
 	getPods, err := podsClient.List(context.TODO(), listOptions)
 

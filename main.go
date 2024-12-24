@@ -21,6 +21,7 @@ func main() {
 	app.Get("/api/deployment/list", controllers.ListDeployments)
 	app.Get("/api/deployment/get/:deployment", controllers.GetDeployments)
 	app.Get("/api/deployment/list/:deployment/pods/:label", controllers.GetPods)
+	app.Get("/api/deployment/get/:deployment/pod/:pod", controllers.GetSpecificPod)
 	// Check if .kubeconfig is accessible at startup
 	_, kubeErr := config.KubeConfig()
 	if kubeErr != nil {

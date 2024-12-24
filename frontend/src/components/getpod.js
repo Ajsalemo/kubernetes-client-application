@@ -13,10 +13,11 @@ import { Link } from "react-router";
 import { useParams } from "react-router-dom";
 import { backendApiURL } from "../utils/constants";
 
-export const ListAllPodsForDeployment = () => {
+export const GetPod = () => {
     const params = useParams();
     const deploymentName = params.deployment;
-    const appLabelName = params.app;
+    const podName = params.pod;
+    console.log(podName)
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
         backgroundColor: '#fff',
@@ -30,26 +31,26 @@ export const ListAllPodsForDeployment = () => {
         height: '100%',
     }));
 
-    const [listAllPodsForDeployment, setListAllPodsForDeployment] = useState([])
+    const [getPod, setGetPod] = useState([])
     const [isLoading, setIsLoading] = useState(false);
-    const [listAllPodsForDeploymentErrorCode, setListAllPodsForDeploymentErrorCode] = useState("")
-    const [listAllPodsForDeploymentErrorMessage, setListAllPodsForDeploymentErrorMessage] = useState("")
+    const [getPodErrorCode, setGetPodErrorCode] = useState("")
+    const [getPodErrorMessage, setGetPodErrorMessage] = useState("")
 
     const getAllPodsForDeployment = async () => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
-            const { data: { pods } } = await axios.get(`${backendApiURL}/api/deployment/list/${deploymentName}/pods/${appLabelName}`);
+            const { data: { pods } } = await axios.get(`${backendApiURL}/api/deployment/get/${deploymentName}/pod/${podName}`);
             console.log(pods)
-            setListAllPodsForDeployment(pods);
+            setGetPod(pods);
             setIsLoading(false);
-            setListAllPodsForDeploymentErrorCode("");
-            setListAllPodsForDeploymentErrorMessage("");
+            setGetPodErrorCode("");
+            setGetPodErrorMessage("");
         } catch (error) {
             console.error(error.code);
             console.error(error.message);
-            setListAllPodsForDeploymentErrorCode(error.code);
-            setListAllPodsForDeploymentErrorMessage(error.message);
+            setGetPodErrorCode(error.code);
+            setGetPodErrorMessage(error.message);
             setIsLoading(false);
         }
     }
@@ -61,8 +62,8 @@ export const ListAllPodsForDeployment = () => {
 
     return (
         <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#cfb6b6', height: '100vh', padding: '1rem' }}>
-            <Grid style={{ backgroundColor: '#cfb6b6', height: '100%' }}>
-                <Grid style={{ minHeight: '100%' }}>
+            <Grid style={{ backgroundColor: '#cfb6b6', height: '100vh' }}>
+                <Grid style={{ maxHeight: '100%' }}>
                     <AppBar position="static" style={{ backgroundColor: '#1A2027' }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
@@ -71,28 +72,26 @@ export const ListAllPodsForDeployment = () => {
                         </Toolbar>
                     </AppBar>
                     <DeploymentItem>
-                        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}>
-                            {listAllPodsForDeploymentErrorCode && <div style={{ color: 'red' }}>Error code: {listAllPodsForDeploymentErrorCode}</div>}
-                            {listAllPodsForDeploymentErrorMessage && <div style={{ color: 'red' }}>Error message: {listAllPodsForDeploymentErrorMessage}</div>}
+                        <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}>
+                            {getPodErrorCode && <div style={{ color: 'red', textAlign: 'center' }}>Error code: {getPodErrorCode}</div>}
+                            {getPodErrorMessage && <div style={{ color: 'red', textAlign: 'center' }}>Error message: {getPodErrorMessage}</div>}
                             {isLoading
                                 ?
-                                <div>
+                                <div style={{ display: 'flex', justifyContent: 'center' }}>
                                     <CircularProgress color="primary" />
                                 </div>
                                 :
-                                listAllPodsForDeployment.length > 0 ? listAllPodsForDeployment.map((pod, index) => (
-                                    <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', margin: '1rem 0' }}>
-                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
-                                    </div>
-                                )) : !listAllPodsForDeploymentErrorCode && !listAllPodsForDeploymentErrorMessage(
+                                getPod.length > 0 ? getPod.map((pod, index) => (
+                                    <pre key={index}>{JSON.stringify(pod.metadata, null, 2)}</pre>
+                                )) : !getPodErrorCode && !getPodErrorMessage(
                                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>
                                 )
                             }
                         </div>
                     </DeploymentItem>
-                    {/* {listAllPodsForDeployment.length > 0 && (
+                    {getPod.length > 0 && (
                         <Button variant="contained" color="primary" style={{ margin: '1rem 0 1rem 1rem' }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>Scroll to top</Button>
-                    )} */}
+                    )}
                 </Grid>
             </Grid>
         </Box>
