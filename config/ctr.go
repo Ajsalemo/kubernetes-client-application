@@ -33,6 +33,7 @@ func PullAuthenticatedImage(imageDefinition CreateDeploymentStruct) error {
 		return err
 	}
 
+	zap.L().Info("Pulling image with authentication: " + imageDefinition.ContainerRegistryServer + "/" + imageDefinition.ContainerImageName + ":" + imageDefinition.ContainerImageTag)
 	image, err := client.Pull(ctx, imageDefinition.ContainerRegistryServer+"/"+imageDefinition.ContainerImageName+":"+imageDefinition.ContainerImageTag, containerd.WithPullUnpack, containerd.WithResolver(resolver))
 
 	if err != nil {
