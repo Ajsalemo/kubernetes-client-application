@@ -95,8 +95,8 @@ export const Deployment = () => {
                         </Toolbar>
                     </AppBar>
                     <DeploymentItem>
-                        {listDeploymentErrorCode && <div style={{ color: 'red' }}>Error code: {listDeploymentErrorCode}</div>}
-                        {listDeploymentErrorMessage && <div style={{ color: 'red' }}>Error message: {listDeploymentErrorMessage}</div>}
+                        {listDeploymentErrorCode !== "" && <div style={{ color: 'red' }}>Error code: {listDeploymentErrorCode}</div>}
+                        {listDeploymentErrorMessage !== "" && <div style={{ color: 'red' }}>Error message: {listDeploymentErrorMessage}</div>}
                         {isLoading
                             ?
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -132,7 +132,7 @@ export const Deployment = () => {
                                         <Button variant="contained" color="error" onClick={() => deleteSpecificDeployment(deployment.metadata.name)} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                     </Grid>
                                 </div>
-                            )) : !listDeploymentErrorCode && !listDeploymentErrorMessage(
+                            )) : (
                                 <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>
                             )
                         }

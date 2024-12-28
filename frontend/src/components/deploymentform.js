@@ -26,6 +26,10 @@ export const DeploymentForm = ({ getListDeployments }) => {
             .string("Enter your container name")
             .min(2, "Container Name should be of minimum 2 characters length")
             .required("Container Name is required"),
+        containerRegistryServer: yup
+            .string("Enter your container registry server")
+            .min(1, "Container Registry Server should be of minimum 1 character length")
+            .required("Container Registry Server is required"),
         containerImageName: yup
             .string("Enter your container image name")
             .min(1, "Container Image Name should be of minimum 1 character length")
@@ -85,9 +89,8 @@ export const DeploymentForm = ({ getListDeployments }) => {
 
     const CustomRadioFormControlLabelComponent = (props) => {
         const radioGroup = useRadioGroup();
-
         let checked = false;
-        console.log(radioGroup);
+
         if (radioGroup) {
             checked = radioGroup.value === props.value;
         }
@@ -100,18 +103,20 @@ export const DeploymentForm = ({ getListDeployments }) => {
             deploymentName: "",
             deploymentLabel: "",
             containerName: "",
+            containerRegistryServer: "",
             containerImageName: "",
             containerImageTag: "",
             containerPort: "",
             replicaCount: "",
             registryUsername: "",
             registryPassword: "",
+            registryServer: "",
             registryType: "public",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => createDeployment(values)
     });
-    console.log(formik);
+    console.log(formik.values);
     return (
         <Paper>
             <form onSubmit={formik.handleSubmit}>
@@ -149,6 +154,19 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.containerName && Boolean(formik.errors.containerName)}
                     helperText={formik.touched.containerName && formik.errors.containerName}
+                    style={{ marginBottom: "1rem" }}
+                />
+                <TextField
+                    fullWidth
+                    id="containerRegistryServer"
+                    name="containerRegistryServer"
+                    label="Container Registry Server"
+                    placeholder="eg. docker.io"
+                    value={formik.values.containerRegistryServer}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.containerRegistryServer && Boolean(formik.errors.containerRegistryServer)}
+                    helperText={formik.touched.containerRegistryServer && formik.errors.containerRegistryServer}
                     style={{ marginBottom: "1rem" }}
                 />
                 <TextField
@@ -243,8 +261,8 @@ export const DeploymentForm = ({ getListDeployments }) => {
                 <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
                     {isLoading ? <CircularProgress color="primary" /> : "Submit"}
                 </Button>
-                {listDeploymentsErrorCode && <div style={{ color: "red", marginTop: "1rem" }}>Error code: {listDeploymentsErrorCode}</div>}
-                {listDeploymentsErrorMessage && <div style={{ color: "red", marginTop: "1rem" }}>Error message: {listDeploymentsErrorMessage}</div>}
+                {listDeploymentsErrorCode !== "" && <div style={{ color: "red", marginTop: "1rem" }}>Error code: {listDeploymentsErrorCode}</div>}
+                {listDeploymentsErrorMessage !== "" && <div style={{ color: "red", marginTop: "1rem" }}>Error message: {listDeploymentsErrorMessage}</div>}
             </form>
         </Paper>
     )

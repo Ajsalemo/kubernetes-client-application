@@ -40,7 +40,6 @@ export const ListAllPodsForDeployment = () => {
         try {
             // Fetch all Deployment information from k8s
             const { data: { pods } } = await axios.get(`${backendApiURL}/api/deployment/list/${deploymentName}/pods/${appLabelName}`);
-            console.log(pods)
             setListAllPodsForDeployment(pods);
             setIsLoading(false);
             setListAllPodsForDeploymentErrorCode("");
@@ -72,8 +71,8 @@ export const ListAllPodsForDeployment = () => {
                     </AppBar>
                     <DeploymentItem>
                         <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}>
-                            {listAllPodsForDeploymentErrorCode && <div style={{ color: 'red' }}>Error code: {listAllPodsForDeploymentErrorCode}</div>}
-                            {listAllPodsForDeploymentErrorMessage && <div style={{ color: 'red' }}>Error message: {listAllPodsForDeploymentErrorMessage}</div>}
+                            {listAllPodsForDeploymentErrorCode !== "" && <div style={{ color: 'red' }}>Error code: {listAllPodsForDeploymentErrorCode}</div>}
+                            {listAllPodsForDeploymentErrorMessage !== "" && <div style={{ color: 'red' }}>Error message: {listAllPodsForDeploymentErrorMessage}</div>}
                             {isLoading
                                 ?
                                 <div>
@@ -84,15 +83,15 @@ export const ListAllPodsForDeployment = () => {
                                     <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', margin: '1rem 0' }}>
                                         <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
                                     </div>
-                                )) : !listAllPodsForDeploymentErrorCode && !listAllPodsForDeploymentErrorMessage(
-                                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>
+                                )) : (
+                                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No pods found</span></div>
                                 )
                             }
                         </div>
                     </DeploymentItem>
-                    {/* {listAllPodsForDeployment.length > 0 && (
+                    {listAllPodsForDeployment.length > 0 && (
                         <Button variant="contained" color="primary" style={{ margin: '1rem 0 1rem 1rem' }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>Scroll to top</Button>
-                    )} */}
+                    )}
                 </Grid>
             </Grid>
         </Box>

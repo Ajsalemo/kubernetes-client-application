@@ -27,6 +27,17 @@ func CreateDeployment(c *fiber.Ctx) error {
 		return err
 	}
 
+	if createDeploymentStruct.RegistryType == "private" {
+		// Pull the image from the private registry
+		// Do this as a "pre pull"
+		err := config.PullAuthenticatedImage(createDeploymentStruct)
+
+		if err != nil {
+			zap.L().Error(err.Error())
+			return c.Status(500).JSON(fiber.Map{"error": err.Error()})
+		}
+	}
+
 	containerPort, err := strconv.ParseInt(createDeploymentStruct.ContainerPort, 10, 32)
 	if err != nil {
 		zap.L().Error(err.Error())
@@ -47,14 +58,14 @@ func CreateDeployment(c *fiber.Ctx) error {
 			Replicas: config.Int32Ptr(int32(replicaCount)),
 			Selector: &metav1.LabelSelector{
 				MatchLabels: map[string]string{
-					"app": createDeploymentStruct.DeploymentLabel,
+					"app":   createDeploymentStruct.DeploymentLabel,
 					"owner": createDeploymentStruct.DeploymentName,
 				},
 			},
 			Template: apiv1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
 					Labels: map[string]string{
-						"app": createDeploymentStruct.DeploymentLabel,
+						"app":   createDeploymentStruct.DeploymentLabel,
 						"owner": createDeploymentStruct.DeploymentName,
 					},
 				},
@@ -62,7 +73,7 @@ func CreateDeployment(c *fiber.Ctx) error {
 					Containers: []apiv1.Container{
 						{
 							Name:  createDeploymentStruct.ContainerName,
-							Image: createDeploymentStruct.ContainerImageName + ":" + createDeploymentStruct.ContainerImageTag,
+							Image: createDeploymentStruct.ContainerRegistryServer + "/" + createDeploymentStruct.ContainerImageName + ":" + createDeploymentStruct.ContainerImageTag,
 							Ports: []apiv1.ContainerPort{
 								{
 									Name:          "http",

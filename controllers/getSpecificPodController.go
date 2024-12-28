@@ -42,10 +42,6 @@ func GetSpecificPod(c *fiber.Ctx) error {
 	for _, d := range getPods.Items {
 		zap.L().Info(" * " + d.GetName())
 	}
-	// If the deployment is not found, return a 404
-	if len(getPods.Items) == 0 {
-		return c.Status(404).JSON(fiber.Map{"error": "Pod or replicas not found"})
-	} else {
-		return c.JSON(fiber.Map{"pods": getPods.Items})
-	}
+
+	return c.JSON(fiber.Map{"pods": getPods.Items})
 }

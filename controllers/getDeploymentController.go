@@ -40,10 +40,6 @@ func GetDeployments(c *fiber.Ctx) error {
 	for _, d := range getDeployment.Items {
 		zap.L().Info(" * " + d.GetName())
 	}
-	// If the deployment is not found, return a 404
-	if len(getDeployment.Items) == 0 {
-		return c.Status(404).JSON(fiber.Map{"error": "Deployment not found"})
-	} else {
-		return c.JSON(fiber.Map{"deployments": getDeployment.Items})
-	}
+
+	return c.JSON(fiber.Map{"deployments": getDeployment.Items})
 }

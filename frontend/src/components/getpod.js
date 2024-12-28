@@ -17,7 +17,6 @@ export const GetPod = () => {
     const params = useParams();
     const deploymentName = params.deployment;
     const podName = params.pod;
-    console.log(podName)
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
         backgroundColor: '#fff',
@@ -41,7 +40,6 @@ export const GetPod = () => {
         try {
             // Fetch all Deployment information from k8s
             const { data: { pods } } = await axios.get(`${backendApiURL}/api/deployment/get/${deploymentName}/pod/${podName}`);
-            console.log(pods)
             setGetPod(pods);
             setIsLoading(false);
             setGetPodErrorCode("");
@@ -73,8 +71,8 @@ export const GetPod = () => {
                     </AppBar>
                     <DeploymentItem>
                         <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}>
-                            {getPodErrorCode && <div style={{ color: 'red', textAlign: 'center' }}>Error code: {getPodErrorCode}</div>}
-                            {getPodErrorMessage && <div style={{ color: 'red', textAlign: 'center' }}>Error message: {getPodErrorMessage}</div>}
+                            {getPodErrorCode !== "" && <div style={{ color: 'red', textAlign: 'center' }}>Error code: {getPodErrorCode}</div>}
+                            {getPodErrorMessage !== "" && <div style={{ color: 'red', textAlign: 'center' }}>Error message: {getPodErrorMessage}</div>}
                             {isLoading
                                 ?
                                 <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -82,8 +80,36 @@ export const GetPod = () => {
                                 </div>
                                 :
                                 getPod.length > 0 ? getPod.map((pod, index) => (
-                                    <pre key={index}>{JSON.stringify(pod.metadata, null, 2)}</pre>
-                                )) : !getPodErrorCode && !getPodErrorMessage(
+                                    <div
+                                        key={index}
+                                        style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}
+                                    >
+                                        <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify' }}>
+                                            <div>
+                                                <Button variant="contained" color="primary" tyle={{ margin: '0 1rem' }}>
+                                                    <Link to={`/deployment/${deploymentName}`} style={{ color: '#fff', textDecoration: 'none' }}>View deployment</Link>
+                                                </Button>
+                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Pod metadata</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Pod spec</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Pod status</Link></Button>
+                                            </div>
+                                            <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                                <span id="metadata"><b>Pod metadata</b></span>
+                                                <pre>{JSON.stringify(pod.metadata, null, 2)}</pre>
+                                            </div>
+                                            <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                                <span id="spec"><b>Pod spec</b></span>
+                                                <pre>{JSON.stringify(pod.spec, null, 2)}</pre>
+                                            </div>
+                                            <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                                <span id="status"><b>Pod status</b></span>
+                                                <pre>{JSON.stringify(pod.status, null, 2)}</pre>
+                                            </div>
+                                        </Grid>
+                                        <Grid size={{ xs: 2 }}>
+                                            <Button variant="contained" color="error" onClick={() => console.log("test")} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
+                                        </Grid>
+                                    </div>)) : (
                                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>
                                 )
                             }

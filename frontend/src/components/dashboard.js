@@ -44,7 +44,6 @@ export const Dashboard = () => {
     const getListDeployments = async () => {
         setIsLoading(true);
         try {
-            console.log('getListDeployments() was called');
             // Fetch all Deployment information from k8s
             const { data: { deployments } } = await axios.get(`${backendApiURL}/api/deployment/list`);
             setListDeployments(deployments);
@@ -99,8 +98,8 @@ export const Dashboard = () => {
                 </Grid>
                 <Grid size={{ xs: 6 }} style={{ maxHeight: '100%' }}>
                     <DeploymentItem>
-                        {listDeploymentsErrorCode && <div style={{ color: 'red' }}>Error code: {listDeploymentsErrorCode}</div>}
-                        {listDeploymentsErrorMessage && <div style={{ color: 'red' }}>Error message: {listDeploymentsErrorMessage}</div>}
+                        {listDeploymentsErrorCode !== "" && <div style={{ color: 'red' }}>Error code: {listDeploymentsErrorCode}</div>}
+                        {listDeploymentsErrorMessage !== "" && <div style={{ color: 'red' }}>Error message: {listDeploymentsErrorMessage}</div>}
                         {isLoading
                             ?
                             <div style={{ display: 'flex', justifyContent: 'center' }}>
