@@ -33,8 +33,8 @@ func CreateDeployment(c *fiber.Ctx) error {
 	// Image pull secrets are required for private registries - we create a k8s secret to store the credentials and then reference it in ImagePullSecrets for the PodSpec
 	// https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
 	if createDeploymentStruct.RegistryType == "private" {
-		conf := config.DockerRegistryConfig{
-			Auths: map[string]config.DockerRegistryAuth{
+		conf := config.RegistryConfig{
+			Auths: map[string]config.RegistryAuth{
 				createDeploymentStruct.ContainerRegistryServer: {
 					Username: createDeploymentStruct.RegistryUsername,
 					Password: createDeploymentStruct.RegistryPassword,

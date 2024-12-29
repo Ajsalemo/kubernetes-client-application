@@ -10,11 +10,11 @@ import (
 	"github.com/containerd/containerd/v2/pkg/namespaces"
 )
 
-type DockerRegistryConfig struct {
-	Auths map[string]DockerRegistryAuth `json:"auths"`
+type RegistryConfig struct {
+	Auths map[string]RegistryAuth `json:"auths"`
 }
 
-type DockerRegistryAuth struct {
+type RegistryAuth struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
