@@ -37,6 +37,7 @@ export const Dashboard = () => {
 
     const [listDeployments, setListDeployments] = useState([])
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingForDeletion, setIsLoadingForDeletion] = useState({});
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("")
     const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("")
     const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
@@ -59,15 +60,15 @@ export const Dashboard = () => {
         }
     }
 
-    const deleteDeployment = async (deploymentName) => {
-        setIsLoading(true);
+    const deleteDeployment = async (deploymentName, i) => {
+        setIsLoadingForDeletion({ ...isLoadingForDeletion, [i]: true });
         try {
             // Fetch all Deployment information from k8s
             const res = await axios.delete(`${backendApiURL}/api/deployment/delete/${deploymentName}`);
             if (res) {
                 // Get the updated list of deployments
                 await getListDeployments();
-                setIsLoading(false);
+                setIsLoadingForDeletion({ ...isLoadingForDeletion, [i]: false });
             }
             setListDeploymentsErrorCode("");
             setListDeploymentsErrorMessage("");
@@ -81,7 +82,7 @@ export const Dashboard = () => {
             } else {
                 setListDeploymentsErrorMessage(error.message);
             }
-            setIsLoading(false);
+            setIsLoadingForDeletion({ ...isLoadingForDeletion, [i]: false });
         }
     }
 
@@ -106,25 +107,25 @@ export const Dashboard = () => {
                                 <CircularProgress color="primary" />
                             </div>
                             :
-                            listDeployments.length > 0 ? listDeployments.map((deployment, index) => (
+                            listDeployments.length > 0 ? listDeployments.map((deployment, i) => (
                                 <div
-                                    key={index}
-                                    style={{ display: 'flex', marginBottom: '4rem', backgroundColor: index % 2 === 0 ? "#add8e6" : "#e6f3f7", padding: '1rem', borderRadius: '0.5rem' }}
+                                    key={i}
+                                    style={{ display: 'flex', marginBottom: '4rem', backgroundColor: i % 2 === 0 ? "#add8e6" : "#e6f3f7", padding: '1rem', borderRadius: '0.5rem' }}
                                 >
                                     <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                         <span><b>Deployment name:</b> {deployment.metadata && deployment.metadata.name}</span>
                                         <span><b>Replica count:</b> {deployment.spec && deployment.spec.replicas}</span>
                                         <span><b>terminationGracePeriodSeconds:</b> {deployment.spec && deployment.spec.terminationGracePeriodSeconds}</span>
                                         <span><b>restartPolicy:</b> {deployment.spec && deployment.spec.template.spec.restartPolicy}</span>
-                                        {deployment.spec.template.spec.containers && deployment.spec.template.spec.containers.map((container, index) => (
-                                            <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                        {deployment.spec.template.spec.containers && deployment.spec.template.spec.containers.map((container, j) => (
+                                            <div key={j} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                                 <span><b>Container name:</b> {container && container.name}</span>
                                                 <span><b>Image:</b> {container && container.image}</span>
                                                 <span><b>imagePullPolicy:</b> {container && container.imagePullPolicy}</span>
                                                 <ul style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                                     <b>Ports:</b>
-                                                    {container.ports && container.ports.map((port, index) => (
-                                                        <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingLeft: '2rem' }}>
+                                                    {container.ports && container.ports.map((port, j) => (
+                                                        <div key={j} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingLeft: '2rem' }}>
                                                             <li><b>Container Port:</b> {port && port.containerPort}</li>
                                                             <li><b>Protocol:</b> {port && port.protocol}</li>
                                                         </div>
@@ -141,7 +142,7 @@ export const Dashboard = () => {
                                         </div>
                                     </Grid>
                                     <Grid size={{ xs: 2 }}>
-                                        <Button variant="contained" color="error" onClick={() => deleteDeployment(deployment.metadata.name)} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
+                                        <Button variant="contained" color="error" onClick={() => deleteDeployment(deployment.metadata.name, i)} disabled={isLoadingForDeletion[i]}>{isLoadingForDeletion[i] ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                     </Grid>
                                     <div></div>
                                 </div>
