@@ -10,6 +10,15 @@ import (
 	"github.com/containerd/containerd/v2/pkg/namespaces"
 )
 
+type DockerRegistryConfig struct {
+	Auths map[string]DockerRegistryAuth `json:"auths"`
+}
+
+type DockerRegistryAuth struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 func ContainerdClient() (*containerd.Client, context.Context, error) {
 	client, err := containerd.New("/run/containerd/containerd.sock")
 	ctx := namespaces.WithNamespace(context.Background(), "default")
