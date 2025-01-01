@@ -10,14 +10,19 @@ import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link } from "react-router";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { backendApiURL } from "../utils/constants";
 
 export const GetPod = () => {
     const params = useParams();
+    const navigate = useNavigate();
+    const location = useLocation();
     const deploymentName = params.deployment;
     const podName = params.pod;
+    const podAppLabelName = location.state.podAppLabelName;
 
+    console.log(podAppLabelName)
+    
     const DeploymentItem = styled(Paper)(({ theme }) => ({
         backgroundColor: '#fff',
         ...theme.typography.body2,
@@ -35,7 +40,7 @@ export const GetPod = () => {
     const [getPodErrorCode, setGetPodErrorCode] = useState("")
     const [getPodErrorMessage, setGetPodErrorMessage] = useState("")
 
-    const getAllPodsForDeployment = async () => {
+    const getSpecificPod = async () => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
@@ -53,8 +58,29 @@ export const GetPod = () => {
         }
     }
 
+    const deletePod = async () => {
+        setIsLoading(true);
+        try {
+            // Fetch all Deployment information from k8s
+            const res = await axios.delete(`${backendApiURL}/api/deployment/pod/delete/${podName}`);
+            if (res) {
+                // Delete the pod and then navigate back to the `listAllPodsForDeployment` page
+                setIsLoading(false);
+                navigate(`/deployment/${deploymentName}/pods/${podAppLabelName}`);
+            }
+            setGetPodErrorCode("");
+            setGetPodErrorMessage("");
+        } catch (error) {
+            console.error(error.code);
+            console.error(error.message);
+            setGetPodErrorCode(error.code);
+            setGetPodErrorMessage(error.message);
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
-        getAllPodsForDeployment();
+        getSpecificPod();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -107,7 +133,7 @@ export const GetPod = () => {
                                             </div>
                                         </Grid>
                                         <Grid size={{ xs: 2 }}>
-                                            <Button variant="contained" color="error" onClick={() => console.log("test")} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
+                                            <Button variant="contained" color="error" onClick={() => deletePod()} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                         </Grid>
                                     </div>)) : (
                                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>

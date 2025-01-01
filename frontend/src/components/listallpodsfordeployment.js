@@ -81,7 +81,7 @@ export const ListAllPodsForDeployment = () => {
                                 :
                                 listAllPodsForDeployment.length > 0 ? listAllPodsForDeployment.map((pod, index) => (
                                     <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', margin: '1rem 0' }}>
-                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
+                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} state={{ podAppLabelName: appLabelName }} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
                                     </div>
                                 )) : (
                                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No pods found</span></div>
