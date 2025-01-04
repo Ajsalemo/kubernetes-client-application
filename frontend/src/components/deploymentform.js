@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, MenuItem, Select } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid2";
@@ -56,6 +56,12 @@ export const DeploymentForm = ({ getListDeployments }) => {
                 .min(1, "Registry password should be of minimum 1 character length")
                 .required("Registry password is required"),
         }),
+        cpu: yup
+            .number("Enter your CPU value")
+            .required("CPU is required"),
+        memory: yup
+            .number("Enter your memory value")
+            .required("Memory is required"),
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -98,6 +104,24 @@ export const DeploymentForm = ({ getListDeployments }) => {
         return <FormControlLabel checked={checked} {...props} />
     }
 
+    const cpuOptions = [
+        { value: "0.5", label: "0.5" },
+        { value: "1", label: "1" },
+        { value: "2", label: "2" },
+        { value: "4", label: "4" },
+        { value: "8", label: "8" },
+        { value: "16", label: "16" },
+    ];
+
+    const memoryOptions = [
+        { value: "0.5", label: "0.5" },
+        { value: "1", label: "1" },
+        { value: "2", label: "2" },
+        { value: "4", label: "4" },
+        { value: "8", label: "8" },
+        { value: "16", label: "16" },
+    ];
+
     const formik = useFormik({
         initialValues: {
             deploymentName: "",
@@ -112,6 +136,8 @@ export const DeploymentForm = ({ getListDeployments }) => {
             registryPassword: "",
             registryServer: "",
             registryType: "public",
+            cpu: cpuOptions[0].value,
+            memory: memoryOptions[0].value,
         },
         validationSchema: validationSchema,
         onSubmit: (values) => createDeployment(values)
@@ -258,6 +284,38 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     helperText={formik.touched.replicaCount && formik.errors.replicaCount}
                     style={{ marginBottom: "1rem" }}
                 />
+                <Select
+                    fullWidth
+                    id="cpu"
+                    name="cpu"
+                    label="CPU"
+                    value={formik.values.cpu}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.cpu && Boolean(formik.errors.cpu)}
+                    helperText={formik.touched.cpu && formik.errors.cpu}
+                    style={{ marginBottom: "1rem", textAlign: "left" }}
+                >
+                    {cpuOptions.map((cpuOption, index) => (
+                        <MenuItem key={index} value={cpuOption.value}>{cpuOption.label}</MenuItem>
+                    ))}
+                </Select>
+                <Select
+                    fullWidth
+                    id="memory"
+                    name="memory"
+                    label="Memory"
+                    value={formik.values.memory}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.memory && Boolean(formik.errors.memory)}
+                    helperText={formik.touched.memory && formik.errors.memory}
+                    style={{ marginBottom: "1rem", textAlign: "left" }}
+                >
+                    {memoryOptions.map((memoryOption, index) => (
+                        <MenuItem key={index} value={memoryOption.value}>{memoryOption.label}</MenuItem>
+                    ))}
+                </Select>
                 <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
                     {isLoading ? <CircularProgress color="primary" /> : "Submit"}
                 </Button>
