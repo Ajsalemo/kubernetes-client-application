@@ -32,6 +32,7 @@ export const ListAllPodsForDeployment = () => {
 
     const [listAllPodsForDeployment, setListAllPodsForDeployment] = useState([])
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingForDeletion, setIsLoadingForDeletion] = useState({});
     const [listAllPodsForDeploymentErrorCode, setListAllPodsForDeploymentErrorCode] = useState("")
     const [listAllPodsForDeploymentErrorMessage, setListAllPodsForDeploymentErrorMessage] = useState("")
 
@@ -50,6 +51,27 @@ export const ListAllPodsForDeployment = () => {
             setListAllPodsForDeploymentErrorCode(error.code);
             setListAllPodsForDeploymentErrorMessage(error.message);
             setIsLoading(false);
+        }
+    }
+
+    const deletePod = async (podName) => {
+        setIsLoadingForDeletion({ ...isLoadingForDeletion, [podName]: true });
+        try {
+            // Fetch all Deployment information from k8s
+            const res = await axios.delete(`${backendApiURL}/api/deployment/pod/delete/${podName}`);
+            if (res) {
+                // Delete the pod and then refresh the list of pods
+                await getAllPodsForDeployment();
+                setIsLoadingForDeletion({ ...isLoadingForDeletion, [podName]: false });
+            }
+            setListAllPodsForDeploymentErrorCode("");
+            setListAllPodsForDeploymentErrorMessage("");
+        } catch (error) {
+            console.error(error.code);
+            console.error(error.message);
+            setListAllPodsForDeploymentErrorCode(error.code);
+            setListAllPodsForDeploymentErrorMessage(error.message);
+            setIsLoadingForDeletion({ ...isLoadingForDeletion, [podName]: false });
         }
     }
 
@@ -80,8 +102,11 @@ export const ListAllPodsForDeployment = () => {
                                 </div>
                                 :
                                 listAllPodsForDeployment.length > 0 ? listAllPodsForDeployment.map((pod, index) => (
-                                    <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', margin: '1rem 0' }}>
+                                    <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: '1rem 0', width: '100%'  }}>
                                         <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} state={{ podAppLabelName: appLabelName }} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
+                                        <Grid size={{ xs: 2 }} style={{ alignSelf: 'center' }}>
+                                            <Button variant="contained" color="error" onClick={() => deletePod(pod.metadata.name)} disabled={isLoadingForDeletion[pod.metadata.name]}>{isLoadingForDeletion[pod.metadata.name] ? <CircularProgress color="primary" /> : "Delete"}</Button>
+                                        </Grid>
                                     </div>
                                 )) : (
                                     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No pods found</span></div>

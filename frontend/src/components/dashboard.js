@@ -69,7 +69,6 @@ export const Dashboard = () => {
                 // Get the updated list of deployments
                 await getListDeployments();
                 setIsLoadingForDeletion({ ...isLoadingForDeletion, [deploymentName]: false });
-                console.log(isLoadingForDeletion);
             }
             setListDeploymentsErrorCode("");
             setListDeploymentsErrorMessage("");
