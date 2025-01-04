@@ -116,7 +116,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
         validationSchema: validationSchema,
         onSubmit: (values) => createDeployment(values)
     });
-    console.log(formik.values);
+
     return (
         <Paper>
             <form onSubmit={formik.handleSubmit}>

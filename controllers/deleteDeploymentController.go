@@ -107,7 +107,7 @@ func DeleteDeployment(c *fiber.Ctx) error {
 
 			elapsed := time.Since(start)
 			zap.L().Info("Polling deletion: " + elapsed.String())
-			// If the elapsed time is greater than 30 seconds, return a 500
+			// If the elapsed time is greater than 60 seconds, return a 500
 			if elapsed > 60*time.Second {
 				zap.L().Info("Elapsed time: " + elapsed.String())
 				zap.L().Warn("Deletion took longer than 30 seconds, exiting")

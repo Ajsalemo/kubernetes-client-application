@@ -60,15 +60,16 @@ export const Dashboard = () => {
         }
     }
 
-    const deleteDeployment = async (deploymentName, i) => {
-        setIsLoadingForDeletion({ ...isLoadingForDeletion, [i]: true });
+    const deleteDeployment = async (deploymentName) => {
+        setIsLoadingForDeletion({ ...isLoadingForDeletion, [deploymentName]: true });
         try {
             // Fetch all Deployment information from k8s
             const res = await axios.delete(`${backendApiURL}/api/deployment/delete/${deploymentName}`);
             if (res) {
                 // Get the updated list of deployments
                 await getListDeployments();
-                setIsLoadingForDeletion({ ...isLoadingForDeletion, [i]: false });
+                setIsLoadingForDeletion({ ...isLoadingForDeletion, [deploymentName]: false });
+                console.log(isLoadingForDeletion);
             }
             setListDeploymentsErrorCode("");
             setListDeploymentsErrorMessage("");
@@ -82,7 +83,7 @@ export const Dashboard = () => {
             } else {
                 setListDeploymentsErrorMessage(error.message);
             }
-            setIsLoadingForDeletion({ ...isLoadingForDeletion, [i]: false });
+            setIsLoadingForDeletion({ ...isLoadingForDeletion, [deploymentName]: false });
         }
     }
 
@@ -142,7 +143,7 @@ export const Dashboard = () => {
                                         </div>
                                     </Grid>
                                     <Grid size={{ xs: 2 }}>
-                                        <Button variant="contained" color="error" onClick={() => deleteDeployment(deployment.metadata.name, i)} disabled={isLoadingForDeletion[i]}>{isLoadingForDeletion[i] ? <CircularProgress color="primary" /> : "Delete"}</Button>
+                                        <Button variant="contained" color="error" onClick={() => deleteDeployment(deployment.metadata.name)} disabled={isLoadingForDeletion[deployment.metadata.name]}>{isLoadingForDeletion[deployment.metadata.name] ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                     </Grid>
                                     <div></div>
                                 </div>

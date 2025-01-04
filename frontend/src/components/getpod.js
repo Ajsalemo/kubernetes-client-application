@@ -20,8 +20,6 @@ export const GetPod = () => {
     const deploymentName = params.deployment;
     const podName = params.pod;
     const podAppLabelName = location.state.podAppLabelName;
-
-    console.log(podAppLabelName)
     
     const DeploymentItem = styled(Paper)(({ theme }) => ({
         backgroundColor: '#fff',
