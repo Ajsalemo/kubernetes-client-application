@@ -135,9 +135,12 @@ export const Dashboard = () => {
                                                 <span><b>Memory (limit):</b> {container.resources.limits && container.resources.limits.memory}</span>
                                             </div>
                                         ))}
-                                        <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000', width: '100%', display: 'flex', alignItems: 'flex-start' }}>
+                                        <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000', width: '100%', display: 'flex', alignItems: 'flex-end' }}>
                                             <Button variant="contained" color="primary" style={{ 'marginTop': '1rem' }}>
                                                 <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: '#fff', textDecoration: 'none' }}>View deployment</Link>
+                                            </Button>
+                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}>
+                                                <Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>View pods</Link>
                                             </Button>
                                         </div>
                                     </Grid>
