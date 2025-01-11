@@ -5,6 +5,7 @@ import Grid from "@mui/material/Grid2";
 import Paper from "@mui/material/Paper";
 import Radio from "@mui/material/Radio";
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
+import InputLabel from '@mui/material/InputLabel';
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -284,7 +285,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     helperText={formik.touched.replicaCount && formik.errors.replicaCount}
                     style={{ marginBottom: "1rem" }}
                 />
-                <Select
+                <TextField
                     fullWidth
                     id="cpu"
                     name="cpu"
@@ -292,6 +293,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     value={formik.values.cpu}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    select={true}
                     error={formik.touched.cpu && Boolean(formik.errors.cpu)}
                     helperText={formik.touched.cpu && formik.errors.cpu}
                     style={{ marginBottom: "1rem", textAlign: "left" }}
@@ -299,8 +301,8 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     {cpuOptions.map((cpuOption, index) => (
                         <MenuItem key={index} value={cpuOption.value}>{cpuOption.label}</MenuItem>
                     ))}
-                </Select>
-                <Select
+                </TextField>
+                <TextField
                     fullWidth
                     id="memory"
                     name="memory"
@@ -308,6 +310,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     value={formik.values.memory}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    select={true}
                     error={formik.touched.memory && Boolean(formik.errors.memory)}
                     helperText={formik.touched.memory && formik.errors.memory}
                     style={{ marginBottom: "1rem", textAlign: "left" }}
@@ -315,7 +318,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     {memoryOptions.map((memoryOption, index) => (
                         <MenuItem key={index} value={memoryOption.value}>{memoryOption.label}</MenuItem>
                     ))}
-                </Select>
+                </TextField>
                 <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
                     {isLoading ? <CircularProgress color="primary" /> : "Submit"}
                 </Button>
