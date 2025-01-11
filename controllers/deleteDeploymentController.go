@@ -120,9 +120,11 @@ func DeleteDeployment(c *fiber.Ctx) error {
 			if len(getDeployment.Items) == 0 && len(listSecrets.Items) == 0 {
 				zap.L().Info("Deletion took " + elapsed.String())
 				zap.L().Info("Deployment: " + deploymentName + " is not found, Deployment has been deleted. Deployment items is " + fmt.Sprint(len(getDeployment.Items)))
-				zap.L().Info("Secret: " + getSecret.GetName() + " is not found, Secret has been deleted. Secret items is " + fmt.Sprint(len(listSecrets.Items)))
+				if getSecret.GetName() != "" {
+					zap.L().Info("Secret: " + getSecret.GetName() + " is not found, Secret has been deleted. Secret items is " + fmt.Sprint(len(listSecrets.Items)))
+					zap.L().Info("Deleted secret " + getSecret.GetName())
+				}
 				zap.L().Info("Deleted deployment " + deploymentName)
-				zap.L().Info("Deleted secret " + getSecret.GetName())
 				return c.JSON(fiber.Map{"message": "Deleted deployment " + deploymentName})
 			}
 

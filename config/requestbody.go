@@ -12,4 +12,6 @@ type CreateDeploymentStruct struct {
 	RegistryType            string `json:"registryType"`
 	RegistryUsername        string `json:"registryUsername"`
 	RegistryPassword        string `json:"registryPassword"`
+	CPU                     string `json:"cpu"`
+	Memory                  string `json:"memory"`
 }
