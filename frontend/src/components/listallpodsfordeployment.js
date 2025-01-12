@@ -102,9 +102,14 @@ export const ListAllPodsForDeployment = () => {
                                 </div>
                                 :
                                 listAllPodsForDeployment.length > 0 ? listAllPodsForDeployment.map((pod, index) => (
-                                    <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: '1rem 0', width: '100%'  }}>
-                                        <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} state={{ podAppLabelName: appLabelName }} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
-                                        <Grid size={{ xs: 2 }} style={{ alignSelf: 'center' }}>
+                                    <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: '1rem 0', width: '100%', borderBottom: '1px solid #000' }}>
+                                        <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} state={{ podAppLabelName: appLabelName }} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
+                                            <Grid style={{ textAlign: 'left' }}>
+                                                <pre>{JSON.stringify(pod.status, null, 2)}</pre>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid size={{ xs: 2 }} style={{ alignSelf: 'flex-start' }}>
                                             <Button variant="contained" color="error" onClick={() => deletePod(pod.metadata.name)} disabled={isLoadingForDeletion[pod.metadata.name]}>{isLoadingForDeletion[pod.metadata.name] ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                         </Grid>
                                     </div>

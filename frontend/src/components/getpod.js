@@ -20,7 +20,7 @@ export const GetPod = () => {
     const deploymentName = params.deployment;
     const podName = params.pod;
     const podAppLabelName = location.state.podAppLabelName;
-    
+
     const DeploymentItem = styled(Paper)(({ theme }) => ({
         backgroundColor: '#fff',
         ...theme.typography.body2,
@@ -113,9 +113,9 @@ export const GetPod = () => {
                                                 <Button variant="contained" color="primary" tyle={{ margin: '0 1rem' }}>
                                                     <Link to={`/deployment/${deploymentName}`} style={{ color: '#fff', textDecoration: 'none' }}>View deployment</Link>
                                                 </Button>
-                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Pod metadata</Link></Button>
-                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Pod spec</Link></Button>
-                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Pod status</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }} state={{ podAppLabelName: podAppLabelName }}>Pod metadata</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }} state={{ podAppLabelName: podAppLabelName }}>Pod spec</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }} state={{ podAppLabelName: podAppLabelName }}>Pod status</Link></Button>
                                             </div>
                                             <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
                                                 <span id="metadata"><b>Pod metadata</b></span>

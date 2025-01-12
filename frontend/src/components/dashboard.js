@@ -92,10 +92,12 @@ export const Dashboard = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#cfb6b6', height: '100vh', padding: '1rem' }}>
-            <Grid container spacing={{ xs: 2, md: 3 }} style={{ backgroundColor: '#cfb6b6', height: '100vh' }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#2c2b3b', height: '100vh', padding: '1rem' }}>
+            <Grid container spacing={{ xs: 2, md: 3 }} style={{ backgroundColor: '#2c2b3b', height: '100vh' }}>
                 <Grid size={{ xs: 6 }}>
-                    <Item><DeploymentForm getListDeployments={getListDeployments} /></Item>
+                    <Item style={{ backgroundColor: '#2c2b3b' }}>
+                        <DeploymentForm getListDeployments={getListDeployments} />
+                    </Item>
                 </Grid>
                 <Grid size={{ xs: 6 }} style={{ maxHeight: '100%' }}>
                     <DeploymentItem>
