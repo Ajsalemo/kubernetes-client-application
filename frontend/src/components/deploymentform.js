@@ -1,4 +1,5 @@
 import { Button, MenuItem } from "@mui/material";
+import { styled } from '@mui/material/styles';
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid2";
@@ -11,6 +12,28 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import * as yup from "yup";
 import { backendApiURL } from "../utils/constants";
+
+const StyledTextField = styled((props) => (
+    <TextField
+        slotProps={{
+            htmlInput: {
+                style: {
+                    color: 'white'
+                }
+            },
+            inputLabel: {
+                style: {
+                    color: 'white'
+                }
+            }
+        }}
+        {...props}
+    />
+))(() => ({
+    '& .MuiSelect-select': {
+        color: '#fff'
+    },
+}));
 
 export const DeploymentForm = ({ getListDeployments }) => {
     const validationSchema = yup.object({
@@ -146,7 +169,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
     return (
         <Paper style={{ backgroundColor: '#2c2b3b' }}>
             <form onSubmit={formik.handleSubmit}>
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="deploymentName"
                     name="deploymentName"
@@ -157,21 +180,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.deploymentName && Boolean(formik.errors.deploymentName)}
                     helperText={formik.touched.deploymentName && formik.errors.deploymentName}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="deploymentLabel"
                     name="deploymentLabel"
@@ -182,21 +193,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.deploymentLabel && Boolean(formik.errors.deploymentLabel)}
                     helperText={formik.touched.deploymentLabel && formik.errors.deploymentLabel}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="containerName"
                     name="containerName"
@@ -207,21 +206,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.containerName && Boolean(formik.errors.containerName)}
                     helperText={formik.touched.containerName && formik.errors.containerName}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="containerRegistryServer"
                     name="containerRegistryServer"
@@ -232,21 +219,10 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     onBlur={formik.handleBlur}
                     error={formik.touched.containerRegistryServer && Boolean(formik.errors.containerRegistryServer)}
                     helperText={formik.touched.containerRegistryServer && formik.errors.containerRegistryServer}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     style={{ marginBottom: "1rem" }}
+                    variant="standard"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="containerImageName"
                     name="containerImageName"
@@ -257,21 +233,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.containerImageName && Boolean(formik.errors.containerImageName)}
                     helperText={formik.touched.containerImageName && formik.errors.containerImageName}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="containerImageTag"
                     name="containerImageTag"
@@ -282,18 +246,6 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.containerImageTag && Boolean(formik.errors.containerImageTag)}
                     helperText={formik.touched.containerImageTag && formik.errors.containerImageTag}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />
                 <Grid display="flex" justifyContent="flex-start">
@@ -312,7 +264,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     </RadioGroup>
                 </Grid>
                 {/* If a private image is used, ask for a username and password for registry authentication */}
-                {formik.values.registryType === "private" && <TextField
+                {formik.values.registryType === "private" && <StyledTextField
                     fullWidth
                     id="registryUsername"
                     name="registryUsername"
@@ -323,21 +275,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.registryUsername && Boolean(formik.errors.registryUsername)}
                     helperText={formik.touched.registryUsername && formik.errors.registryUsername}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />}
-                {formik.values.registryType === "private" && <TextField
+                {formik.values.registryType === "private" && <StyledTextField
                     fullWidth
                     id="registryPassword"
                     name="registryPassword"
@@ -349,21 +289,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     helperText={formik.touched.registryPassword && formik.errors.registryPassword}
                     style={{ marginBottom: "1rem" }}
                     type="password"
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />}
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="containerPort"
                     name="containerPort"
@@ -374,21 +302,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.containerPort && Boolean(formik.errors.containerPort)}
                     helperText={formik.touched.containerPort && formik.errors.containerPort}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="replicaCount"
                     name="replicaCount"
@@ -399,21 +315,9 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.replicaCount && Boolean(formik.errors.replicaCount)}
                     helperText={formik.touched.replicaCount && formik.errors.replicaCount}
                     style={{ marginBottom: "1rem" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 />
-                <TextField
+                <StyledTextField
                     fullWidth
                     id="cpu"
                     name="cpu"
@@ -425,25 +329,13 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.cpu && Boolean(formik.errors.cpu)}
                     helperText={formik.touched.cpu && formik.errors.cpu}
                     style={{ marginBottom: "1rem", textAlign: "left" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 >
                     {cpuOptions.map((cpuOption, index) => (
                         <MenuItem key={index} value={cpuOption.value}>{cpuOption.label}</MenuItem>
                     ))}
-                </TextField>
-                <TextField
+                </StyledTextField>
+                <StyledTextField
                     fullWidth
                     id="memory"
                     name="memory"
@@ -455,24 +347,12 @@ export const DeploymentForm = ({ getListDeployments }) => {
                     error={formik.touched.memory && Boolean(formik.errors.memory)}
                     helperText={formik.touched.memory && formik.errors.memory}
                     style={{ marginBottom: "1rem", textAlign: "left" }}
-                    slotProps={{
-                        htmlInput: {
-                            style: {
-                                color: 'white'
-                            }
-                        },
-                        inputLabel: {
-                            style: {
-                                color: 'white'
-                            }
-                        }
-                    }}
                     variant="standard"
                 >
                     {memoryOptions.map((memoryOption, index) => (
                         <MenuItem key={index} value={memoryOption.value}>{memoryOption.label}</MenuItem>
                     ))}
-                </TextField>
+                </StyledTextField>
                 <Button color="primary" variant="contained" fullWidth type="submit" disabled={isLoading} >
                     {isLoading ? <CircularProgress color="primary" /> : "Submit"}
                 </Button>
