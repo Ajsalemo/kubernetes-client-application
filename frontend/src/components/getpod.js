@@ -111,7 +111,7 @@ export const GetPod = () => {
                                                 </Button>
                                                 <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/pod", search: `?name=${deploymentName}&pod=${podName}&label=${podAppLabelName}`, hash: "#metadata" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Pod metadata</Link></Button>
                                                 <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/pod", search: `?name=${deploymentName}&pod=${podName}&label=${podAppLabelName}`, hash: "#spec" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Pod spec</Link></Button>
-                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link tto={{ pathname: "/pod", search: `?name=${deploymentName}&pod=${podName}&label=${podAppLabelName}`, hash: "#status" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Pod status</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/pod", search: `?name=${deploymentName}&pod=${podName}&label=${podAppLabelName}`, hash: "#status" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Pod status</Link></Button>
                                             </div>
                                             <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
                                                 <div id="metadata" style={{ "marginTop": "2rem", color: "#fff" }}><b>Pod metadata</b></div>

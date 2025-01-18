@@ -107,9 +107,9 @@ export const Deployment = () => {
                                 >
                                     <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", textAlign: "justify" }}>
                                         <div>
-                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#metadata" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment metadata</Link></Button>
-                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#spec" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment spec</Link></Button>
-                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#status" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment status</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/deployment", search: `?name=${deploymentName}`, hash: "#metadata" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment metadata</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/deployment", search: `?name=${deploymentName}`, hash: "#spec" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment spec</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/deployment", search: `?name=${deploymentName}`, hash: "#status" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment status</Link></Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/pods?name=${encodeURIComponent(deployment.metadata.name)}&label=${encodeURIComponent(deployment.spec.template.metadata.labels.app)}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
                                         </div>
                                         <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
