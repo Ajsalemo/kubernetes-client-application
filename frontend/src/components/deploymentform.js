@@ -1,11 +1,11 @@
 import { Button, MenuItem } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid2";
 import Paper from "@mui/material/Paper";
 import Radio from "@mui/material/Radio";
 import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
+import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -167,7 +167,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
     });
 
     return (
-        <Paper style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
+        <Paper style={{ backgroundColor: "#2c2b3b" }} >
             <form onSubmit={formik.handleSubmit}>
                 <StyledTextField
                     fullWidth

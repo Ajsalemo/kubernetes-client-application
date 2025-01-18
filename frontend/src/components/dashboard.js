@@ -87,12 +87,12 @@ export const Dashboard = () => {
         <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", height: "100vh", padding: "1rem" }}>
             <Grid container spacing={{ xs: 2, md: 3 }} style={{ backgroundColor: "#2c2b3b", height: "100vh" }}>
                 <Grid size={{ xs: 6 }}>
-                    <Item style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
+                    <Item style={{ backgroundColor: "#2c2b3b" }} >
                         <DeploymentForm getListDeployments={getListDeployments} />
                     </Item>
                 </Grid>
                 <Grid size={{ xs: 6 }} style={{ maxHeight: "100%" }}>
-                    <DeploymentItem style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
+                    <DeploymentItem style={{ backgroundColor: "#2c2b3b" }} >
                         {listDeploymentsErrorCode !== "" && <div style={{ color: "red" }}>Error code: {listDeploymentsErrorCode}</div>}
                         {listDeploymentsErrorMessage !== "" && <div style={{ color: "red" }}>Error message: {listDeploymentsErrorMessage}</div>}
                         {isLoading

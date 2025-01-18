@@ -82,20 +82,20 @@ export const GetPod = () => {
         <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", padding: "1rem" }}>
             <Grid style={{ backgroundColor: "#2c2b3b" }}>
                 <Grid style={{ maxHeight: "100%" }}>
-                    <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
+                    <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }} >
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
                                 <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Home</Link>
                             </Typography>
                         </Toolbar>
                     </AppBar>
-                    <DeploymentItem elevation={0}>
+                    <DeploymentItem >
                         <div style={{ display: "flex", flexDirection: "column", textAlign: "justify", marginBottom: "4rem", backgroundColor: "#2c2b3b", padding: "1rem", borderRadius: "0.5rem", color: "#f37171" }}>
                             {getPodErrorCode !== "" && <div style={{ color: "red", textAlign: "center" }}>Error code: {getPodErrorCode}</div>}
                             {getPodErrorMessage !== "" && <div style={{ color: "red", textAlign: "center" }}>Error message: {getPodErrorMessage}</div>}
                             {isLoading
                                 ?
-                                <div style={{ display: "flex", justifyContent: "center", height: "100vh"  }}>
+                                <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
                                     <CircularProgress color="primary" />
                                 </div>
                                 :

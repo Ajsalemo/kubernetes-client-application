@@ -1,15 +1,22 @@
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { RouteBase } from "./components/routebase";
 import reportWebVitals from "./reportWebVitals";
-import CssBaseline from "@mui/material/CssBaseline";
-import { RouteBase } from "./components/routebase"
+
+const theme = createTheme({
+  shadows: "none"
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <React.Fragment>
-      <CssBaseline />
-      <RouteBase />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <RouteBase />
+      </ThemeProvider>
     </React.Fragment>
   </React.StrictMode>
 );

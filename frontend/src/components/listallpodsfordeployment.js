@@ -1,6 +1,5 @@
 import { Button } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid2";
 import Paper from "@mui/material/Paper";
@@ -78,9 +77,9 @@ export const ListAllPodsForDeployment = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", padding: "1rem" }}>
+        <Grid sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", padding: "1rem" }}>
             <Grid style={{ backgroundColor: "#2c2b3b", height: "100%" }}>
-                <Grid style={{ minHeight: "100%" }}>
+                <Grid style={{ minHeight: "100%" }} >
                     <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
@@ -121,6 +120,6 @@ export const ListAllPodsForDeployment = () => {
                     )}
                 </Grid>
             </Grid>
-        </Box>
+        </Grid>
     )
 }
