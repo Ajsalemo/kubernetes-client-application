@@ -60,7 +60,7 @@ export const GetPod = () => {
             if (res) {
                 // Delete the pod and then navigate back to the `listAllPodsForDeployment` page
                 setIsLoading(false);
-                navigate(`/deployment/pods?name=${deploymentName}&label=${podAppLabelName}`);
+                navigate(`/deployment/pods?name=${encodeURIComponent(deploymentName)}&label=${encodeURIComponent(podAppLabelName)}`);
             }
             setGetPodErrorCode("");
             setGetPodErrorMessage("");
@@ -107,7 +107,7 @@ export const GetPod = () => {
                                         <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", textAlign: "justify" }}>
                                             <div>
                                                 <Button variant="contained" color="primary" tyle={{ margin: "0 1rem" }}>
-                                                    <Link to={`/deployment/${deploymentName}`} style={{ color: "#fff", textDecoration: "none" }}>View deployment</Link>
+                                                    <Link to={`/deployment?name=${encodeURIComponent(deploymentName)}`} style={{ color: "#fff", textDecoration: "none" }}>View deployment</Link>
                                                 </Button>
                                                 <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#metadata" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }} state={{ podAppLabelName: podAppLabelName }}>Pod metadata</Link></Button>
                                                 <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#spec" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }} state={{ podAppLabelName: podAppLabelName }}>Pod spec</Link></Button>

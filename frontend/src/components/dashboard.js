@@ -134,7 +134,7 @@ export const Dashboard = () => {
                                                 <Link to={`/deployment?name=${deployment.metadata.name}`} style={{ color: "#fff", textDecoration: "none" }}>View deployment</Link>
                                             </Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}>
-                                                <Link to={`/deployment/pods?name=${deployment.metadata.name}&label=${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link>
+                                                <Link to={`/deployment/pods?name=${encodeURIComponent(deployment.metadata.name)}&label=${encodeURIComponent(deployment.spec.template.metadata.labels.app)}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link>
                                             </Button>
                                         </div>
                                     </Grid>

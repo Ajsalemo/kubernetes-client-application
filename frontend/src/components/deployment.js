@@ -83,7 +83,7 @@ export const Deployment = () => {
     return (
         <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", padding: "1rem" }}>
             <Grid style={{ backgroundColor: "#2c2b3b", height: "100%" }}>
-                <Grid> 
+                <Grid>
                     <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
@@ -110,7 +110,7 @@ export const Deployment = () => {
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#metadata" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment metadata</Link></Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#spec" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment spec</Link></Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#status" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment status</Link></Button>
-                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/pods?name=${deployment.metadata.name}&label=${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/pods?name=${encodeURIComponent(deployment.metadata.name)}&label=${encodeURIComponent(deployment.spec.template.metadata.labels.app)}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
                                         </div>
                                         <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
                                             <div id="metadata" style={{ "marginTop": "2rem", color: "#fff" }}><b>Deployment metadata</b></div>
