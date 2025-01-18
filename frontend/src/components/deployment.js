@@ -23,9 +23,7 @@ export const Deployment = () => {
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles("dark", {
-            backgroundColor: "#1A2027",
-        }),
+        backgroundColor: "#2c2b3b",
         height: "100%",
     }));
 
@@ -83,10 +81,10 @@ export const Deployment = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#cfb6b6", minHeight: "100vh", padding: "1rem" }}>
-            <Grid style={{ backgroundColor: "#cfb6b6", height: "100%" }}>
-                <Grid>
-                    <AppBar position="static" style={{ backgroundColor: "#1A2027" }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", minHeight: "100vh", padding: "1rem" }}>
+            <Grid style={{ backgroundColor: "#2c2b3b", height: "100%" }}>
+                <Grid> 
+                    <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
                                 <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Home</Link>
@@ -105,7 +103,7 @@ export const Deployment = () => {
                             listDeployment.length > 0 ? listDeployment.map((deployment, index) => (
                                 <div
                                     key={index}
-                                    style={{ display: "flex", justifyContent: "space-between", marginBottom: "4rem", backgroundColor: "#add8e6", padding: "1rem", borderRadius: "0.5rem" }}
+                                    style={{ display: "flex", justifyContent: "space-between", marginBottom: "4rem", backgroundColor: "#2c2b3b", padding: "1rem", borderRadius: "0.5rem", color: "#fff" }}
                                 >
                                     <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", textAlign: "justify" }}>
                                         <div>
@@ -114,16 +112,16 @@ export const Deployment = () => {
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#status" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment status</Link></Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
                                         </div>
-                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
-                                            <span id="metadata"><b>Deployment metadata</b></span>
+                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
+                                            <div id="metadata" style={{ "marginTop": "2rem" }}><b>Deployment metadata</b></div>
                                             <pre>{JSON.stringify(deployment.metadata, null, 2)}</pre>
                                         </div>
-                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
-                                            <span id="spec"><b>Deployment spec</b></span>
+                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
+                                            <div id="spec" style={{ "marginTop": "2rem" }}><b>Deployment spec</b></div>
                                             <pre>{JSON.stringify(deployment.spec, null, 2)}</pre>
                                         </div>
-                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
-                                            <span id="status"><b>Deployment status</b></span>
+                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
+                                            <div id="status" style={{ "marginTop": "2rem" }}><b>Deployment status</b></div>
                                             <pre>{JSON.stringify(deployment.status, null, 2)}</pre>
                                         </div>
                                     </Grid>
