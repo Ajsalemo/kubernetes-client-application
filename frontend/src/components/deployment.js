@@ -81,7 +81,7 @@ export const Deployment = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", minHeight: "100vh", padding: "1rem" }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", padding: "1rem" }}>
             <Grid style={{ backgroundColor: "#2c2b3b", height: "100%" }}>
                 <Grid> 
                     <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }}>
@@ -103,7 +103,7 @@ export const Deployment = () => {
                             listDeployment.length > 0 ? listDeployment.map((deployment, index) => (
                                 <div
                                     key={index}
-                                    style={{ display: "flex", justifyContent: "space-between", marginBottom: "4rem", backgroundColor: "#2c2b3b", padding: "1rem", borderRadius: "0.5rem", color: "#fff" }}
+                                    style={{ display: "flex", justifyContent: "space-between", marginBottom: "4rem", backgroundColor: "#2c2b3b", padding: "1rem", borderRadius: "0.5rem", color: "#f37171" }}
                                 >
                                     <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", textAlign: "justify" }}>
                                         <div>
@@ -113,15 +113,15 @@ export const Deployment = () => {
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
                                         </div>
                                         <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
-                                            <div id="metadata" style={{ "marginTop": "2rem" }}><b>Deployment metadata</b></div>
+                                            <div id="metadata" style={{ "marginTop": "2rem", color: "#fff" }}><b>Deployment metadata</b></div>
                                             <pre>{JSON.stringify(deployment.metadata, null, 2)}</pre>
                                         </div>
                                         <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
-                                            <div id="spec" style={{ "marginTop": "2rem" }}><b>Deployment spec</b></div>
+                                            <div id="spec" style={{ "marginTop": "2rem", color: "#fff" }}><b>Deployment spec</b></div>
                                             <pre>{JSON.stringify(deployment.spec, null, 2)}</pre>
                                         </div>
                                         <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
-                                            <div id="status" style={{ "marginTop": "2rem" }}><b>Deployment status</b></div>
+                                            <div id="status" style={{ "marginTop": "2rem", color: "#fff" }}><b>Deployment status</b></div>
                                             <pre>{JSON.stringify(deployment.status, null, 2)}</pre>
                                         </div>
                                     </Grid>

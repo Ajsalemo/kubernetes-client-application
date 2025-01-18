@@ -22,14 +22,11 @@ export const GetPod = () => {
     const podAppLabelName = location.state.podAppLabelName;
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
-        backgroundColor: "#fff",
+        backgroundColor: "#2c2b3b",
         ...theme.typography.body2,
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles("dark", {
-            backgroundColor: "#1A2027",
-        }),
         height: "100%",
     }));
 
@@ -83,18 +80,18 @@ export const GetPod = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#cfb6b6", height: "100vh", padding: "1rem" }}>
-            <Grid style={{ backgroundColor: "#cfb6b6", height: "100vh" }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", padding: "1rem" }}>
+            <Grid style={{ backgroundColor: "#2c2b3b" }}>
                 <Grid style={{ maxHeight: "100%" }}>
-                    <AppBar position="static" style={{ backgroundColor: "#1A2027" }}>
+                    <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
                                 <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Home</Link>
                             </Typography>
                         </Toolbar>
                     </AppBar>
-                    <DeploymentItem>
-                        <div style={{ display: "flex", flexDirection: "column", textAlign: "justify", marginBottom: "4rem", backgroundColor: "#add8e6", padding: "1rem", borderRadius: "0.5rem" }}>
+                    <DeploymentItem elevation={0}>
+                        <div style={{ display: "flex", flexDirection: "column", textAlign: "justify", marginBottom: "4rem", backgroundColor: "#2c2b3b", padding: "1rem", borderRadius: "0.5rem", color: "#f37171" }}>
                             {getPodErrorCode !== "" && <div style={{ color: "red", textAlign: "center" }}>Error code: {getPodErrorCode}</div>}
                             {getPodErrorMessage !== "" && <div style={{ color: "red", textAlign: "center" }}>Error message: {getPodErrorMessage}</div>}
                             {isLoading
@@ -106,7 +103,7 @@ export const GetPod = () => {
                                 getPod.length > 0 ? getPod.map((pod, index) => (
                                     <div
                                         key={index}
-                                        style={{ display: "flex", justifyContent: "space-between", marginBottom: "4rem", backgroundColor: "#add8e6", padding: "1rem", borderRadius: "0.5rem" }}
+                                        style={{ display: "flex", justifyContent: "space-between", marginBottom: "4rem", backgroundColor: "#2c2b3b", padding: "1rem", borderRadius: "0.5rem" }}
                                     >
                                         <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", textAlign: "justify" }}>
                                             <div>
@@ -117,16 +114,16 @@ export const GetPod = () => {
                                                 <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#spec" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }} state={{ podAppLabelName: podAppLabelName }}>Pod spec</Link></Button>
                                                 <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#status" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }} state={{ podAppLabelName: podAppLabelName }}>Pod status</Link></Button>
                                             </div>
-                                            <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
-                                                <span id="metadata"><b>Pod metadata</b></span>
+                                            <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
+                                                <div id="metadata" style={{ "marginTop": "2rem", color: "#fff" }}><b>Pod metadata</b></div>
                                                 <pre>{JSON.stringify(pod.metadata, null, 2)}</pre>
                                             </div>
-                                            <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
-                                                <span id="spec"><b>Pod spec</b></span>
+                                            <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
+                                                <div id="spec" style={{ "marginTop": "2rem", color: "#fff" }}><b>Pod spec</b></div>
                                                 <pre>{JSON.stringify(pod.spec, null, 2)}</pre>
                                             </div>
-                                            <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
-                                                <span id="status"><b>Pod status</b></span>
+                                            <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
+                                                <div id="status" style={{ "marginTop": "2rem", color: "#fff" }}><b>Pod status</b></div>
                                                 <pre>{JSON.stringify(pod.status, null, 2)}</pre>
                                             </div>
                                         </Grid>
