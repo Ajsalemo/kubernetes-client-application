@@ -1,6 +1,6 @@
 module github.com/Ajsalemo/kubernetes-client-application
 
-go 1.22.0
+go 1.23.5
 
 toolchain go1.22.7
 
