@@ -1,5 +1,5 @@
 import { Button, MenuItem } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid2";
@@ -18,20 +18,20 @@ const StyledTextField = styled((props) => (
         slotProps={{
             htmlInput: {
                 style: {
-                    color: 'white'
+                    color: "white"
                 }
             },
             inputLabel: {
                 style: {
-                    color: 'white'
+                    color: "white"
                 }
             }
         }}
         {...props}
     />
 ))(() => ({
-    '& .MuiSelect-select': {
-        color: '#fff'
+    "& .MuiSelect-select": {
+        color: "#fff"
     },
 }));
 
@@ -167,7 +167,7 @@ export const DeploymentForm = ({ getListDeployments }) => {
     });
 
     return (
-        <Paper style={{ backgroundColor: '#2c2b3b' }}>
+        <Paper style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
             <form onSubmit={formik.handleSubmit}>
                 <StyledTextField
                     fullWidth
@@ -259,8 +259,8 @@ export const DeploymentForm = ({ getListDeployments }) => {
                         onChange={formik.handleChange}
                         defaultValue="public"
                     >
-                        <CustomRadioFormControlLabelComponent control={<Radio />} label="Public image" value="public" style={{ color: '#fff' }} />
-                        <CustomRadioFormControlLabelComponent control={<Radio />} label="Private image" value="private" style={{ color: '#fff' }} />
+                        <CustomRadioFormControlLabelComponent control={<Radio />} label="Public image" value="public" style={{ color: "#fff" }} />
+                        <CustomRadioFormControlLabelComponent control={<Radio />} label="Private image" value="private" style={{ color: "#fff" }} />
                     </RadioGroup>
                 </Grid>
                 {/* If a private image is used, ask for a username and password for registry authentication */}

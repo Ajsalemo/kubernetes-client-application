@@ -1,14 +1,14 @@
-import { Button } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
+import { Button } from "@mui/material";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Grid from '@mui/material/Grid2';
-import Paper from '@mui/material/Paper';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import Grid from "@mui/material/Grid2";
+import Paper from "@mui/material/Paper";
+import { experimentalStyled as styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useNavigate, useParams } from "react-router-dom";
 import { backendApiURL } from "../utils/constants";
@@ -19,15 +19,14 @@ export const Deployment = () => {
     const deploymentName = params.deployment
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
-        backgroundColor: '#fff',
         ...theme.typography.body2,
         padding: theme.spacing(2),
-        textAlign: 'center',
+        textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles('dark', {
-            backgroundColor: '#1A2027',
+        ...theme.applyStyles("dark", {
+            backgroundColor: "#1A2027",
         }),
-        height: '100%',
+        height: "100%",
     }));
 
     const [listDeployment, setListDeployment] = useState([])
@@ -84,46 +83,46 @@ export const Deployment = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#cfb6b6', minHeight: '100vh', padding: '1rem' }}>
-            <Grid style={{ backgroundColor: '#cfb6b6', height: '100%' }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#cfb6b6", minHeight: "100vh", padding: "1rem" }}>
+            <Grid style={{ backgroundColor: "#cfb6b6", height: "100%" }}>
                 <Grid>
-                    <AppBar position="static" style={{ backgroundColor: '#1A2027' }}>
+                    <AppBar position="static" style={{ backgroundColor: "#1A2027" }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
-                                <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>Home</Link>
+                                <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Home</Link>
                             </Typography>
                         </Toolbar>
                     </AppBar>
                     <DeploymentItem>
-                        {listDeploymentErrorCode !== "" && <div style={{ color: 'red' }}>Error code: {listDeploymentErrorCode}</div>}
-                        {listDeploymentErrorMessage !== "" && <div style={{ color: 'red' }}>Error message: {listDeploymentErrorMessage}</div>}
+                        {listDeploymentErrorCode !== "" && <div style={{ color: "red" }}>Error code: {listDeploymentErrorCode}</div>}
+                        {listDeploymentErrorMessage !== "" && <div style={{ color: "red" }}>Error message: {listDeploymentErrorMessage}</div>}
                         {isLoading
                             ?
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <div style={{ display: "flex", justifyContent: "center" }}>
                                 <CircularProgress color="primary" />
                             </div>
                             :
                             listDeployment.length > 0 ? listDeployment.map((deployment, index) => (
                                 <div
                                     key={index}
-                                    style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}
+                                    style={{ display: "flex", justifyContent: "space-between", marginBottom: "4rem", backgroundColor: "#add8e6", padding: "1rem", borderRadius: "0.5rem" }}
                                 >
-                                    <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', textAlign: 'justify' }}>
+                                    <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", textAlign: "justify" }}>
                                         <div>
-                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#metadata" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment metadata</Link></Button>
-                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#spec" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment spec</Link></Button>
-                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to="#status" style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>Deployment status</Link></Button>
-                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>View pods</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#metadata" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment metadata</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#spec" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment spec</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#status" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment status</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
                                         </div>
-                                        <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
                                             <span id="metadata"><b>Deployment metadata</b></span>
                                             <pre>{JSON.stringify(deployment.metadata, null, 2)}</pre>
                                         </div>
-                                        <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
                                             <span id="spec"><b>Deployment spec</b></span>
                                             <pre>{JSON.stringify(deployment.spec, null, 2)}</pre>
                                         </div>
-                                        <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000' }}>
+                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #000" }}>
                                             <span id="status"><b>Deployment status</b></span>
                                             <pre>{JSON.stringify(deployment.status, null, 2)}</pre>
                                         </div>
@@ -133,12 +132,12 @@ export const Deployment = () => {
                                     </Grid>
                                 </div>
                             )) : (
-                                <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>
+                                <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}><span>No deployments found</span></div>
                             )
                         }
                     </DeploymentItem>
                     {listDeployment.length > 0 && (
-                        <Button variant="contained" color="primary" style={{ margin: '1rem 0 1rem 1rem' }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>Scroll to top</Button>
+                        <Button variant="contained" color="primary" style={{ margin: "1rem 0 1rem 1rem" }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "smooth" })}>Scroll to top</Button>
                     )}
                 </Grid>
             </Grid>

@@ -1,38 +1,38 @@
-import { Button } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Button } from "@mui/material";
+import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Grid from '@mui/material/Grid2';
-import Paper from '@mui/material/Paper';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import Grid from "@mui/material/Grid2";
+import Paper from "@mui/material/Paper";
+import { experimentalStyled as styled } from "@mui/material/styles";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { DeploymentForm } from './deploymentform';
+import { DeploymentForm } from "./deploymentform";
 
 export const Dashboard = () => {
     const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
         ...theme.typography.body2,
         padding: theme.spacing(2),
-        textAlign: 'center',
+        textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles('dark', {
-            backgroundColor: '#1A2027',
+        ...theme.applyStyles("dark", {
+            backgroundColor: "#1A2027",
         }),
-        height: '100%',
+        height: "100%",
     }));
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
         ...theme.typography.body2,
         padding: theme.spacing(2),
-        textAlign: 'center',
+        textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles('dark', {
-            backgroundColor: '#1A2027',
+        ...theme.applyStyles("dark", {
+            backgroundColor: "#1A2027",
         }),
-        height: '100%',
-        overflow: 'scroll'
+        height: "100%",
+        overflow: "scroll"
     }));
 
     const [listDeployments, setListDeployments] = useState([])
@@ -40,7 +40,7 @@ export const Dashboard = () => {
     const [isLoadingForDeletion, setIsLoadingForDeletion] = useState({});
     const [listDeploymentsErrorCode, setListDeploymentsErrorCode] = useState("")
     const [listDeploymentsErrorMessage, setListDeploymentsErrorMessage] = useState("")
-    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? 'http://localhost:3070';
+    const backendApiURL = process.env.REACT_APP_BACKEND_API_URL ?? "http://localhost:3070";
 
     const getListDeployments = async () => {
         setIsLoading(true);
@@ -92,42 +92,42 @@ export const Dashboard = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#2c2b3b', height: '100vh', padding: '1rem' }}>
-            <Grid container spacing={{ xs: 2, md: 3 }} style={{ backgroundColor: '#2c2b3b', height: '100vh' }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", height: "100vh", padding: "1rem" }}>
+            <Grid container spacing={{ xs: 2, md: 3 }} style={{ backgroundColor: "#2c2b3b", height: "100vh" }}>
                 <Grid size={{ xs: 6 }}>
-                    <Item style={{ backgroundColor: '#2c2b3b' }}>
+                    <Item style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
                         <DeploymentForm getListDeployments={getListDeployments} />
                     </Item>
                 </Grid>
-                <Grid size={{ xs: 6 }} style={{ maxHeight: '100%' }}>
-                    <DeploymentItem>
-                        {listDeploymentsErrorCode !== "" && <div style={{ color: 'red' }}>Error code: {listDeploymentsErrorCode}</div>}
-                        {listDeploymentsErrorMessage !== "" && <div style={{ color: 'red' }}>Error message: {listDeploymentsErrorMessage}</div>}
+                <Grid size={{ xs: 6 }} style={{ maxHeight: "100%" }}>
+                    <DeploymentItem style={{ backgroundColor: "#2c2b3b" }} elevation={0}>
+                        {listDeploymentsErrorCode !== "" && <div style={{ color: "red" }}>Error code: {listDeploymentsErrorCode}</div>}
+                        {listDeploymentsErrorMessage !== "" && <div style={{ color: "red" }}>Error message: {listDeploymentsErrorMessage}</div>}
                         {isLoading
                             ?
-                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <div style={{ display: "flex", justifyContent: "center" }}>
                                 <CircularProgress color="primary" />
                             </div>
                             :
                             listDeployments.length > 0 ? listDeployments.map((deployment, i) => (
                                 <div
                                     key={i}
-                                    style={{ display: 'flex', marginBottom: '4rem', backgroundColor: i % 2 === 0 ? "#add8e6" : "#e6f3f7", padding: '1rem', borderRadius: '0.5rem' }}
+                                    style={{ display: "flex", marginBottom: "4rem", backgroundColor: i % 2 === 0 ? "#add8e6" : "#e6f3f7", padding: "1rem", borderRadius: "0.5rem" }}
                                 >
-                                    <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                    <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                                         <span><b>Deployment name:</b> {deployment.metadata && deployment.metadata.name}</span>
                                         <span><b>Replica count:</b> {deployment.spec && deployment.spec.replicas}</span>
                                         <span><b>terminationGracePeriodSeconds:</b> {deployment.spec && deployment.spec.terminationGracePeriodSeconds}</span>
                                         <span><b>restartPolicy:</b> {deployment.spec && deployment.spec.template.spec.restartPolicy}</span>
                                         {deployment.spec.template.spec.containers && deployment.spec.template.spec.containers.map((container, j) => (
-                                            <div key={j} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                            <div key={j} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                                                 <span><b>Container name:</b> {container && container.name}</span>
                                                 <span><b>Image:</b> {container && container.image}</span>
                                                 <span><b>imagePullPolicy:</b> {container && container.imagePullPolicy}</span>
-                                                <ul style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                                <ul style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                                                     <b>Ports:</b>
                                                     {container.ports && container.ports.map((port, j) => (
-                                                        <div key={j} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingLeft: '2rem' }}>
+                                                        <div key={j} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", paddingLeft: "2rem" }}>
                                                             <li><b>Container Port:</b> {port && port.containerPort}</li>
                                                             <li><b>Protocol:</b> {port && port.protocol}</li>
                                                         </div>
@@ -137,12 +137,12 @@ export const Dashboard = () => {
                                                 <span><b>Memory (limit):</b> {container.resources.limits && container.resources.limits.memory}</span>
                                             </div>
                                         ))}
-                                        <div style={{ 'marginTop': '2rem', borderTop: '1px solid #000', width: '100%', display: 'flex', alignItems: 'flex-end' }}>
-                                            <Button variant="contained" color="primary" style={{ 'marginTop': '1rem' }}>
-                                                <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: '#fff', textDecoration: 'none' }}>View deployment</Link>
+                                        <div style={{ "marginTop": "2rem", borderTop: "1px solid #000", width: "100%", display: "flex", alignItems: "flex-end" }}>
+                                            <Button variant="contained" color="primary" style={{ "marginTop": "1rem" }}>
+                                                <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: "#fff", textDecoration: "none" }}>View deployment</Link>
                                             </Button>
-                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}>
-                                                <Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>View pods</Link>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}>
+                                                <Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link>
                                             </Button>
                                         </div>
                                     </Grid>
@@ -152,7 +152,7 @@ export const Dashboard = () => {
                                     <div></div>
                                 </div>
                             )) : (
-                                <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No deployments found</span></div>
+                                <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", color: "#fff" }}><span>No deployments found</span></div>
                             )
                         }
                     </DeploymentItem>

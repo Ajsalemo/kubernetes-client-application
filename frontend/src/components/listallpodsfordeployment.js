@@ -1,14 +1,14 @@
 import { Button } from "@mui/material";
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import Grid from '@mui/material/Grid2';
-import Paper from '@mui/material/Paper';
-import { experimentalStyled as styled } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import Grid from "@mui/material/Grid2";
+import Paper from "@mui/material/Paper";
+import { experimentalStyled as styled } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useParams } from "react-router-dom";
 import { backendApiURL } from "../utils/constants";
@@ -19,15 +19,15 @@ export const ListAllPodsForDeployment = () => {
     const appLabelName = params.app;
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
         ...theme.typography.body2,
         padding: theme.spacing(2),
-        textAlign: 'center',
+        textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles('dark', {
-            backgroundColor: '#1A2027',
+        ...theme.applyStyles("dark", {
+            backgroundColor: "#1A2027",
         }),
-        height: '100%',
+        height: "100%",
     }));
 
     const [listAllPodsForDeployment, setListAllPodsForDeployment] = useState([])
@@ -81,20 +81,20 @@ export const ListAllPodsForDeployment = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: '#cfb6b6', height: '100vh', padding: '1rem' }}>
-            <Grid style={{ backgroundColor: '#cfb6b6', height: '100%' }}>
-                <Grid style={{ minHeight: '100%' }}>
-                    <AppBar position="static" style={{ backgroundColor: '#1A2027' }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#cfb6b6", height: "100vh", padding: "1rem" }}>
+            <Grid style={{ backgroundColor: "#cfb6b6", height: "100%" }}>
+                <Grid style={{ minHeight: "100%" }}>
+                    <AppBar position="static" style={{ backgroundColor: "#1A2027" }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
-                                <Link to="/" style={{ color: '#fff', textDecoration: 'none' }}>Home</Link>
+                                <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Home</Link>
                             </Typography>
                         </Toolbar>
                     </AppBar>
                     <DeploymentItem>
-                        <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '4rem', backgroundColor: '#add8e6', padding: '1rem', borderRadius: '0.5rem' }}>
-                            {listAllPodsForDeploymentErrorCode !== "" && <div style={{ color: 'red' }}>Error code: {listAllPodsForDeploymentErrorCode}</div>}
-                            {listAllPodsForDeploymentErrorMessage !== "" && <div style={{ color: 'red' }}>Error message: {listAllPodsForDeploymentErrorMessage}</div>}
+                        <div style={{ display: "flex", flexDirection: "column", marginBottom: "4rem", backgroundColor: "#add8e6", padding: "1rem", borderRadius: "0.5rem" }}>
+                            {listAllPodsForDeploymentErrorCode !== "" && <div style={{ color: "red" }}>Error code: {listAllPodsForDeploymentErrorCode}</div>}
+                            {listAllPodsForDeploymentErrorMessage !== "" && <div style={{ color: "red" }}>Error message: {listAllPodsForDeploymentErrorMessage}</div>}
                             {isLoading
                                 ?
                                 <div>
@@ -102,25 +102,25 @@ export const ListAllPodsForDeployment = () => {
                                 </div>
                                 :
                                 listAllPodsForDeployment.length > 0 ? listAllPodsForDeployment.map((pod, index) => (
-                                    <div key={index} style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: '1rem 0', width: '100%', borderBottom: '1px solid #000' }}>
-                                        <Grid size={{ xs: 10 }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                            <Button variant="contained" color="primary" style={{ margin: '0 1rem' }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} state={{ podAppLabelName: appLabelName }} style={{ margin: '0 1rem', textDecoration: 'none', color: '#fff' }}>{pod.metadata.name}</Link></Button>
-                                            <Grid style={{ textAlign: 'left' }}>
+                                    <div key={index} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", margin: "1rem 0", width: "100%", borderBottom: "1px solid #000" }}>
+                                        <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} state={{ podAppLabelName: appLabelName }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>{pod.metadata.name}</Link></Button>
+                                            <Grid style={{ textAlign: "left" }}>
                                                 <pre>{JSON.stringify(pod.status, null, 2)}</pre>
                                             </Grid>
                                         </Grid>
-                                        <Grid size={{ xs: 2 }} style={{ alignSelf: 'flex-start' }}>
+                                        <Grid size={{ xs: 2 }} style={{ alignSelf: "flex-start" }}>
                                             <Button variant="contained" color="error" onClick={() => deletePod(pod.metadata.name)} disabled={isLoadingForDeletion[pod.metadata.name]}>{isLoadingForDeletion[pod.metadata.name] ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                         </Grid>
                                     </div>
                                 )) : (
-                                    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}><span>No pods found</span></div>
+                                    <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}><span>No pods found</span></div>
                                 )
                             }
                         </div>
                     </DeploymentItem>
                     {listAllPodsForDeployment.length > 0 && (
-                        <Button variant="contained" color="primary" style={{ margin: '1rem 0 1rem 1rem' }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })}>Scroll to top</Button>
+                        <Button variant="contained" color="primary" style={{ margin: "1rem 0 1rem 1rem" }} onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "smooth" })}>Scroll to top</Button>
                     )}
                 </Grid>
             </Grid>
