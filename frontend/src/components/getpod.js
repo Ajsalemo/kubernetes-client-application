@@ -10,16 +10,15 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { backendApiURL } from "../utils/constants";
 
 export const GetPod = () => {
-    const params = useParams();
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const location = useLocation();
-    const deploymentName = params.deployment;
-    const podName = params.pod;
-    const podAppLabelName = location.state.podAppLabelName;
+    const deploymentName = searchParams.get("name") || "";
+    const podName = searchParams.get("pod") || "";
+    const podAppLabelName = searchParams.get("label") || "";
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
         backgroundColor: "#2c2b3b",
@@ -61,7 +60,7 @@ export const GetPod = () => {
             if (res) {
                 // Delete the pod and then navigate back to the `listAllPodsForDeployment` page
                 setIsLoading(false);
-                navigate(`/deployment/${deploymentName}/pods/${podAppLabelName}`);
+                navigate(`/deployment/pods?name=${deploymentName}&label=${podAppLabelName}`);
             }
             setGetPodErrorCode("");
             setGetPodErrorMessage("");
@@ -96,7 +95,7 @@ export const GetPod = () => {
                             {getPodErrorMessage !== "" && <div style={{ color: "red", textAlign: "center" }}>Error message: {getPodErrorMessage}</div>}
                             {isLoading
                                 ?
-                                <div style={{ display: "flex", justifyContent: "center" }}>
+                                <div style={{ display: "flex", justifyContent: "center", height: "100vh"  }}>
                                     <CircularProgress color="primary" />
                                 </div>
                                 :
@@ -131,7 +130,7 @@ export const GetPod = () => {
                                             <Button variant="contained" color="error" onClick={() => deletePod()} disabled={isLoading}>{isLoading ? <CircularProgress color="primary" /> : "Delete"}</Button>
                                         </Grid>
                                     </div>)) : (
-                                    <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}><span>No deployments found</span></div>
+                                    <div style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", color: "#fff" }}><span>No pod found</span></div>
                                 )
                             }
                         </div>

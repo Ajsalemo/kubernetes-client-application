@@ -10,13 +10,13 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { backendApiURL } from "../utils/constants";
 
 export const Deployment = () => {
-    const params = useParams();
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const deploymentName = params.deployment
+    const deploymentName = searchParams.get("name") || "";
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
         ...theme.typography.body2,
@@ -96,7 +96,7 @@ export const Deployment = () => {
                         {listDeploymentErrorMessage !== "" && <div style={{ color: "red" }}>Error message: {listDeploymentErrorMessage}</div>}
                         {isLoading
                             ?
-                            <div style={{ display: "flex", justifyContent: "center" }}>
+                            <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
                                 <CircularProgress color="primary" />
                             </div>
                             :
@@ -110,7 +110,7 @@ export const Deployment = () => {
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#metadata" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment metadata</Link></Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#spec" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment spec</Link></Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#status" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Deployment status</Link></Button>
-                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/pods?name=${deployment.metadata.name}&label=${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link></Button>
                                         </div>
                                         <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
                                             <div id="metadata" style={{ "marginTop": "2rem", color: "#fff" }}><b>Deployment metadata</b></div>
@@ -130,7 +130,7 @@ export const Deployment = () => {
                                     </Grid>
                                 </div>
                             )) : (
-                                <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}><span>No deployments found</span></div>
+                                <div style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", color: "#fff" }}><span>No deployments found</span></div>
                             )
                         }
                     </DeploymentItem>

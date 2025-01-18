@@ -10,9 +10,9 @@ export const RouteBase = () => (
         <ScrollToAnchor />
         <Routes>
             <Route path="/" Component={Dashboard} />
-            <Route path="/deployment/:deployment" Component={Deployment} />
-            <Route path="/deployment/:deployment/pods/:app" Component={ListAllPodsForDeployment} />
-            <Route path="/deployment/:deployment/pod/get/:pod" Component={GetPod} />
+            <Route path="/deployment" Component={Deployment} />
+            <Route path="/deployment/pods/" Component={ListAllPodsForDeployment} />
+            <Route path="/pod" Component={GetPod} />
         </Routes>
     </BrowserRouter>
 )

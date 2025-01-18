@@ -11,26 +11,18 @@ import { DeploymentForm } from "./deploymentform";
 
 export const Dashboard = () => {
     const Item = styled(Paper)(({ theme }) => ({
-        backgroundColor: "#fff",
         ...theme.typography.body2,
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles("dark", {
-            backgroundColor: "#1A2027",
-        }),
         height: "100%",
     }));
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
-        backgroundColor: "#fff",
         ...theme.typography.body2,
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles("dark", {
-            backgroundColor: "#1A2027",
-        }),
         height: "100%",
         overflow: "scroll"
     }));
@@ -139,10 +131,10 @@ export const Dashboard = () => {
                                         ))}
                                         <div style={{ "marginTop": "2rem", borderTop: "1px solid #000", width: "100%", display: "flex", alignItems: "flex-end" }}>
                                             <Button variant="contained" color="primary" style={{ "marginTop": "1rem" }}>
-                                                <Link to={`/deployment/${deployment.metadata.name}`} style={{ color: "#fff", textDecoration: "none" }}>View deployment</Link>
+                                                <Link to={`/deployment?name=${deployment.metadata.name}`} style={{ color: "#fff", textDecoration: "none" }}>View deployment</Link>
                                             </Button>
                                             <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}>
-                                                <Link to={`/deployment/${deployment.metadata.name}/pods/${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link>
+                                                <Link to={`/deployment/pods?name=${deployment.metadata.name}&label=${deployment.spec.template.metadata.labels.app}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>View pods</Link>
                                             </Button>
                                         </div>
                                     </Grid>

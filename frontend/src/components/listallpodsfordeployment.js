@@ -10,23 +10,20 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { backendApiURL } from "../utils/constants";
 
 export const ListAllPodsForDeployment = () => {
-    const params = useParams();
-    const deploymentName = params.deployment;
-    const appLabelName = params.app;
+    const [searchParams] = useSearchParams();
+    const deploymentName = searchParams.get("name") || "";
+    const podAppLabelName = searchParams.get("label") || "";
 
     const DeploymentItem = styled(Paper)(({ theme }) => ({
-        backgroundColor: "#fff",
         ...theme.typography.body2,
         padding: theme.spacing(2),
         textAlign: "center",
         color: theme.palette.text.secondary,
-        ...theme.applyStyles("dark", {
-            backgroundColor: "#1A2027",
-        }),
+        backgroundColor: "#2c2b3b",
         height: "100%",
     }));
 
@@ -40,7 +37,7 @@ export const ListAllPodsForDeployment = () => {
         setIsLoading(true);
         try {
             // Fetch all Deployment information from k8s
-            const { data: { pods } } = await axios.get(`${backendApiURL}/api/deployment/list/${deploymentName}/pods/${appLabelName}`);
+            const { data: { pods } } = await axios.get(`${backendApiURL}/api/deployment/list/${deploymentName}/pods/${podAppLabelName}`);
             setListAllPodsForDeployment(pods);
             setIsLoading(false);
             setListAllPodsForDeploymentErrorCode("");
@@ -81,10 +78,10 @@ export const ListAllPodsForDeployment = () => {
     }, []);
 
     return (
-        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#cfb6b6", height: "100vh", padding: "1rem" }}>
-            <Grid style={{ backgroundColor: "#cfb6b6", height: "100%" }}>
+        <Box sx={{ flexGrow: 1 }} style={{ backgroundColor: "#2c2b3b", padding: "1rem" }}>
+            <Grid style={{ backgroundColor: "#2c2b3b", height: "100%" }}>
                 <Grid style={{ minHeight: "100%" }}>
-                    <AppBar position="static" style={{ backgroundColor: "#1A2027" }}>
+                    <AppBar position="static" style={{ backgroundColor: "#2c2b3b" }}>
                         <Toolbar variant="dense">
                             <Typography variant="h6" component="div">
                                 <Link to="/" style={{ color: "#fff", textDecoration: "none" }}>Home</Link>
@@ -92,19 +89,19 @@ export const ListAllPodsForDeployment = () => {
                         </Toolbar>
                     </AppBar>
                     <DeploymentItem>
-                        <div style={{ display: "flex", flexDirection: "column", marginBottom: "4rem", backgroundColor: "#add8e6", padding: "1rem", borderRadius: "0.5rem" }}>
+                        <div style={{ display: "flex", flexDirection: "column", marginBottom: "4rem", backgroundColor: "#2c2b3b", padding: "1rem", borderRadius: "0.5rem", color: "#f37171" }}>
                             {listAllPodsForDeploymentErrorCode !== "" && <div style={{ color: "red" }}>Error code: {listAllPodsForDeploymentErrorCode}</div>}
                             {listAllPodsForDeploymentErrorMessage !== "" && <div style={{ color: "red" }}>Error message: {listAllPodsForDeploymentErrorMessage}</div>}
                             {isLoading
                                 ?
-                                <div>
+                                <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
                                     <CircularProgress color="primary" />
                                 </div>
                                 :
                                 listAllPodsForDeployment.length > 0 ? listAllPodsForDeployment.map((pod, index) => (
-                                    <div key={index} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", margin: "1rem 0", width: "100%", borderBottom: "1px solid #000" }}>
+                                    <div key={index} style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", margin: "1rem 0", width: "100%", borderBottom: "1px solid #fff" }}>
                                         <Grid size={{ xs: 10 }} style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
-                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/deployment/${deploymentName}/pod/get/${pod.metadata.name}`} state={{ podAppLabelName: appLabelName }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>{pod.metadata.name}</Link></Button>
+                                            <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={`/pod?name=${deploymentName}&pod=${pod.metadata.name}&label=${podAppLabelName}`} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>{pod.metadata.name}</Link></Button>
                                             <Grid style={{ textAlign: "left" }}>
                                                 <pre>{JSON.stringify(pod.status, null, 2)}</pre>
                                             </Grid>
@@ -114,7 +111,7 @@ export const ListAllPodsForDeployment = () => {
                                         </Grid>
                                     </div>
                                 )) : (
-                                    <div style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}><span>No pods found</span></div>
+                                    <div style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", color: "#fff" }}><span>No pods found</span></div>
                                 )
                             }
                         </div>
