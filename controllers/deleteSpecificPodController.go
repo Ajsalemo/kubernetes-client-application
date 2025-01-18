@@ -37,7 +37,6 @@ func DeleteSpecificPod(c *fiber.Ctx) error {
 
 	// Since k8s will create a pod right after the delete event - it may look like 2 pods are returned in a list, since 1 is deleting and 1 is replacing the deleted one
 	// As a one of other potential solutions, use a loop to watch until the pod is completely removed before returning a response
-	//
 	ticker := time.NewTicker(500 * time.Millisecond)
 	defer ticker.Stop()
 	start := time.Now()

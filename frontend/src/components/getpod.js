@@ -109,9 +109,9 @@ export const GetPod = () => {
                                                 <Button variant="contained" color="primary" tyle={{ margin: "0 1rem" }}>
                                                     <Link to={`/deployment?name=${encodeURIComponent(deploymentName)}`} style={{ color: "#fff", textDecoration: "none" }}>View deployment</Link>
                                                 </Button>
-                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#metadata" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }} state={{ podAppLabelName: podAppLabelName }}>Pod metadata</Link></Button>
-                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#spec" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }} state={{ podAppLabelName: podAppLabelName }}>Pod spec</Link></Button>
-                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to="#status" style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }} state={{ podAppLabelName: podAppLabelName }}>Pod status</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/pod", search: `?name=${deploymentName}&pod=${podName}&label=${podAppLabelName}`, hash: "#metadata" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Pod metadata</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link to={{ pathname: "/pod", search: `?name=${deploymentName}&pod=${podName}&label=${podAppLabelName}`, hash: "#spec" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Pod spec</Link></Button>
+                                                <Button variant="contained" color="primary" style={{ margin: "0 1rem" }}><Link tto={{ pathname: "/pod", search: `?name=${deploymentName}&pod=${podName}&label=${podAppLabelName}`, hash: "#status" }} style={{ margin: "0 1rem", textDecoration: "none", color: "#fff" }}>Pod status</Link></Button>
                                             </div>
                                             <div style={{ "marginTop": "2rem", borderTop: "1px solid #fff" }}>
                                                 <div id="metadata" style={{ "marginTop": "2rem", color: "#fff" }}><b>Pod metadata</b></div>
