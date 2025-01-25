@@ -12,4 +12,8 @@ Run both the frontend and backend applications
   - Build the image then run as a container: `docker run -d -p 3070:3070 -v /path/to/.kube:/path/to/.kube/ kubernetesclientapplication-backend:latest`
   - Or run outside of a container with `go run .`
 
-![alt text](image.png)
+![Home Dashboard](image.png)
+
+![Deployment page](image-1.png)
+
+![Pod page](image-2.png)
