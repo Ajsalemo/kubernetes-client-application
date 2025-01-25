@@ -80,10 +80,10 @@ export const DeploymentForm = ({ getListDeployments }) => {
                 .required("Registry password is required"),
         }),
         cpu: yup
-            .number("Enter your CPU value")
+            .string("Enter your CPU value")
             .required("CPU is required"),
         memory: yup
-            .number("Enter your memory value")
+            .string("Enter your memory value")
             .required("Memory is required"),
     });
 
@@ -137,12 +137,13 @@ export const DeploymentForm = ({ getListDeployments }) => {
     ];
 
     const memoryOptions = [
-        { value: "0.5", label: "0.5" },
-        { value: "1", label: "1" },
-        { value: "2", label: "2" },
-        { value: "4", label: "4" },
-        { value: "8", label: "8" },
-        { value: "16", label: "16" },
+        { value: "250Mi", label: "250Mi" },
+        { value: "500Mi", label: "500Mi" },
+        { value: "1Gi", label: "1Gi" },
+        { value: "2Gi", label: "2Gi" },
+        { value: "4Gi", label: "4Gi" },
+        { value: "8Gi", label: "8Gi" },
+        { value: "16Gi", label: "16Gi" }
     ];
 
     const formik = useFormik({
